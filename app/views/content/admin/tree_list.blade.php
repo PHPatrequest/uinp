@@ -1,7 +1,7 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th style="width:20px"></th>
+            <th style="width:20px; min-width:20px;"></th>
             <th>Title</th>
             <th>Type</th>
             @if (!$inMenuEdit)
