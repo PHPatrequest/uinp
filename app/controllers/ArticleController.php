@@ -116,6 +116,7 @@ class ArticleController extends \BaseController {
 		if(Input::get('vkcheckbox')){
 			if(!empty($link)){
 				$text = $link." \n".$text;
+				$text = '#'.$model->title." \n".$text;
 			}
 			$this->vkwallpost($text, $model->image, explode(',',$tags));			
 		}
