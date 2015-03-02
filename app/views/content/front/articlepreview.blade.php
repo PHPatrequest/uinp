@@ -3,6 +3,8 @@
 		<div class="col-md-12" style="overflow: hidden;">
 			@if(!empty($article->thumb))
 				<img src="{{ $article->thumb }}" class="img-thumbnail pull-left">
+			@elseif(!empty($article->video))
+				<img src="http://img.youtube.com/vi/{{ $article->video }}/0.jpg" class="img-thumbnail-med pull-left">
 			@endif
 			<div style="overflow:hidden">
 				<h2><a href="{{ $article->path }}/{{ $article->alias }}">{{ $article->title }}</a></h2>			

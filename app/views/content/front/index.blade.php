@@ -45,7 +45,7 @@
 					</div>
 					<div class="recent-news col-md-6">
 					@foreach ($articles as $key => $article)
-						@if($key >= count($articles)/2)
+						@if($key == round(count($articles)/2))
 							</div>
 							<div class="recent-news col-md-6">
 						@endif

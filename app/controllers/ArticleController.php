@@ -3,7 +3,8 @@
 class ArticleController extends \BaseController {
 
 	protected $rules = array(
-		'title'		=> 'max:255|required',		
+		'title'		=> 'max:255|required',
+		'video'		=> 'max:255',		
 	);
 	protected $table_fields = array(
 			'Title'		=> 'title',
@@ -69,6 +70,7 @@ class ArticleController extends \BaseController {
 	        $model->alias   			= Input::get('alias');
 	        $model->user_id 			= Auth::user()->id;    
 		    $model->content 			= Input::get('content');
+		    $model->video 				= Input::get('video');
 		    $model->parent_folder_id 	= $parent_folder_id;		    
 
 			$image = '';
@@ -167,6 +169,7 @@ class ArticleController extends \BaseController {
 		        'title'   			=> Input::get('title'),
 		        'alias'   			=> Input::get('alias'),
 		        'content'			=> Input::get('content'),
+		        'video'				=> Input::get('video'),
 		        'user_id'   		=> Auth::user()->id,
 		        'parent_folder_id' 	=> $parent_folder_id,
 	        );

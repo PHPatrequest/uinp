@@ -69,7 +69,7 @@
         </div>
         <div class='form-group col-md-4'>        
             <div class="panel panel-default">
-                <div class="panel-heading">Image <i class="fa fa-times delete_image pull-right" title="Delete"></i></div>
+                <div class="panel-heading">Media <i class="fa fa-times delete_image pull-right" title="Delete"></i></div>
                 <div class="panel-body">
                     <div class="upload_img_cont form-group">                        
                         <img id="img_preview" src="{{ !empty($article->image)?'/'.$article->image:'/assets/images/no-image.jpg' }}" alt="your image" /><br><br>
@@ -77,6 +77,10 @@
                         <input type="hidden" name="image" id="image_path" value="{{ !empty($article->image)?$article->image:'' }}">
                     </div>
                 <div>
+            </div>
+            <div class='form-group'>
+                {{ Form::label('video', 'Video') }}
+                {{ Form::text('video', null, ['class' => 'form-control', 'id' => 'video']) }}
             </div>
         </div>
     </div>

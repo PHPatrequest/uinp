@@ -327,7 +327,11 @@ class Vkontakte
             return $response;
         } else {
             $response = $this->api('wall.post',$data);
-            return $response->post_id;
+            if(isset($response->post_id)){
+                return $response->post_id;
+            } else {
+                return 0;
+            }
         }     
     }
 }

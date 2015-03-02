@@ -17,10 +17,13 @@
 						<div class="entry-meta">Опубликовано {{ $item->created_at }}. Автор {{ $item->username }}</div>
 						@if(!empty($item->image))
 							<img src="/{{ $item->image }}" style="width:100%; max-width:300px; margin: 0 10px 0 0" class="pull-left" title="{{ $item->img_title }}" alt="{{ $item->img_alt }}">
-						@endif
+						@endif	
 						<div class="text-justify">
 							{{ $item->content }}
 						</div>
+						@if(!empty($item->video))
+							<iframe src="https://www.youtube.com/embed/{{ $item->video }}" class="videoframe" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+						@endif
 						<div class="pull-left" style="margin:5px">					
 							@if(!empty($item->tags))
 								<?php $tags = explode(',',$item->tags) ?>
