@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width" />
 	<title>@yield('title')</title>
 
+	<link rel="icon" href="/assets/images/favicon.ico" />
 	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/assets/css/style.css">
