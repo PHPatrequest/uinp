@@ -51,12 +51,13 @@ class Article extends \Eloquent {
      * @return Obj  
      */ 
     public function getTagArticles($tags){
-        return DB::table('tags')->select('articles.*','folders.path','users.username')
+        return DB::table('tags')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
                 ->where('tags.name',$tags)
                 ->join('tagstoelement','tagstoelement.tag_id','=','tags.id')
                 ->leftJoin('articles','articles.id','=','tagstoelement.element_id')
                 ->join('folders','folders.id','=','articles.parent_folder_id')
                 ->join('users','users.id','=','articles.user_id')
+                ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                 ->groupBy('articles.id')                
                 ->orderby('id','DESC')
                 ->paginate(10)
@@ -69,10 +70,12 @@ class Article extends \Eloquent {
      * @return Obj  
      */ 
     public function searchArticles($search){
-        return DB::table('articles')->select('articles.*','folders.path','users.username')
+        return DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
                     ->where('articles.content', 'LIKE', '%'.$search.'%')
                     ->join('folders','folders.id','=','articles.parent_folder_id')
                     ->join('users','users.id','=','articles.user_id')
+                    ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
+                    ->groupBy('articles.id')
                     ->orderby('id','DESC')
                     ->paginate(10)
                     ->appends(array('search' => $search));
@@ -84,10 +87,12 @@ class Article extends \Eloquent {
      * @return Obj  
      */
     public function getLastarticles(){
-        return DB::table('articles')->select('articles.*','folders.path','users.username')
-                ->where('articles.parent_folder_id','!=','51')
+        return DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                
                 ->join('folders','folders.id','=','articles.parent_folder_id')
                 ->join('users','users.id','=','articles.user_id')
+                ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
+                ->where('articles.published_at','!=','0000-00-00 00:00:00')
+                ->groupBy('articles.id')
                 ->orderby('id','DESC')
                 ->paginate(20);
     }
@@ -98,10 +103,12 @@ class Article extends \Eloquent {
      * @return Obj  
      */
     public function getArticlesByParentAlias($parentAlias,$limit){
-        return DB::table('articles')->select('articles.*','folders.path','users.username')                    
+        return DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                    
                     ->join('folders','folders.id','=','articles.parent_folder_id')
                     ->join('users','users.id','=','articles.user_id')
+                    ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                     ->where('folders.alias',$parentAlias)
+                    ->groupBy('articles.id')
                     ->orderby('id','DESC')
                     ->take($limit)
                     ->get();

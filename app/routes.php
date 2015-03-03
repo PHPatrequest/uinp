@@ -13,7 +13,8 @@ Route::controller('/auth', 'AuthController');
 | For all
 |--------------------------------------------------------------------------
 */
-Route::post('/comments/store','CommentController@postStore');
+Route::post('comments/store','CommentController@postStore');
+Route::controller('cron', 'CronController');
 
 /*
 |--------------------------------------------------------------------------

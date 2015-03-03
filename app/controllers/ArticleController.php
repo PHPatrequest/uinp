@@ -10,7 +10,7 @@ class ArticleController extends \BaseController {
 			'Title'		=> 'title',
 			'Author'	=> 'users.username',
 			'Created'	=> 'created_at',
-			'Updated'	=> 'updated_at',
+			'Published'	=> 'published_at',
 		);
 	protected $dontFlash = ['file'];
 
@@ -71,7 +71,11 @@ class ArticleController extends \BaseController {
 	        $model->user_id 			= Auth::user()->id;    
 		    $model->content 			= Input::get('content');
 		    $model->video 				= Input::get('video');
-		    $model->parent_folder_id 	= $parent_folder_id;		    
+		    $model->parent_folder_id 	= $parent_folder_id;
+
+		    if(Input::get('publishnow')){
+		    	$model->published_at = date('Y-m-d H:i:s');
+		    }	    
 
 			$image = '';
 			if (Input::hasFile('userfile')) {
@@ -174,6 +178,10 @@ class ArticleController extends \BaseController {
 		        'user_id'   		=> Auth::user()->id,
 		        'parent_folder_id' 	=> $parent_folder_id,
 	        );
+
+	        if(Input::get('publishnow')){
+		    	$data['published_at'] = date('Y-m-d H:i:s');
+		    }
 			
 			if (Input::hasFile('userfile')) {
 				$image = Common_helper::fileUpload(Input::file('userfile'),'articles/'.$data['alias'],Input::get('alias'));

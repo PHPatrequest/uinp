@@ -28,7 +28,9 @@
 						<div class="pull-left">МЕНЮ</div>
 						<div class="pull-right fa fa-bars show-menu"></div>
 					</div> 
-					{{ $menu->top }}
+					@if(isset($menu->top))
+						{{ $menu->top }}
+					@endif
 				</div>	
 			</div>
 			<div class="col-md-3">	
@@ -43,7 +45,7 @@
 		<div id="header">
 			<h1 class="logo">		
 				<a href="/" title="" rel="home" style="color:#326693">
-					<div class="pull-left" style="font-family:impact; font-size:70px; margin-left: 20px;">U I N P</div>
+					<div class="pull-left"><img src="/assets/images/uinplogo.png" style="width: 160px; margin: 10px 0 0 10px;"></div>
 					<div class="pull-left" style="font-family:impact; font-size:30px; padding:5px 0 0 20px">
 						<div>украинский независимый новостной портал</div>
 						<div style="color: rgb(200, 200, 200);">ukrainian independent news portal</div>
@@ -58,7 +60,9 @@
 					<div class="pull-left">КАТЕГОРИИ</div>
 					<div class="pull-right fa fa-bars show-menu"></div>
 				</div> 
-				{{ $menu->categories }}
+				@if(isset($menu->categories))
+					{{ $menu->categories }}
+				@endif
 			</div>				
 		</div>
 		<div class="breadcrumb">			

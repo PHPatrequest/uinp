@@ -125,8 +125,8 @@
 	</script>
 @stop
 <hr>
-<h4>Комментрарии:</h4>
 @if(isset($comments) && count($comments))
+	<h4>Комментрарии:</h4>
 	<div class="comments-cont">
 		@foreach($comments as $comment)
 			@include('content.front.comment')
