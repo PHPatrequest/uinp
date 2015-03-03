@@ -28,6 +28,7 @@
 						@include('content.front.articlepreview')
 					</div>
 				@endforeach
+				{{ $children->links() }}
 			@endif
 		</div>
 		<div class="col-md-4">

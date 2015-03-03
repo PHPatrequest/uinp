@@ -111,7 +111,7 @@ class Article extends \Eloquent {
                     ->groupBy('articles.id')
                     ->orderby('id','DESC')
                     ->take($limit)
-                    ->get();
+                    ->paginate(20);
     }
 
 }
