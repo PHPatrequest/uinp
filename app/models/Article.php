@@ -102,16 +102,19 @@ class Article extends \Eloquent {
      *
      * @return Obj  
      */
-    public function getArticlesByParentAlias($parentAlias,$limit){
-        return DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                    
+    public function getArticlesByParentAlias($parentAlias,$limit=false){
+        $result =  DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                    
                     ->join('folders','folders.id','=','articles.parent_folder_id')
                     ->join('users','users.id','=','articles.user_id')
                     ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                     ->where('folders.alias',$parentAlias)
                     ->groupBy('articles.id')
-                    ->orderby('id','DESC')
-                    ->take($limit)
-                    ->paginate(20);
+                    ->orderby('id','DESC');
+        if($limit){
+            return $result->take($limit)->get();  
+        } else {
+            return $result->paginate(20);
+        }          
     }
 
 }
