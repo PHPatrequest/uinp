@@ -175,7 +175,6 @@ class ArticleController extends \BaseController {
 		        'alias'   			=> Input::get('alias'),
 		        'content'			=> Input::get('content'),
 		        'video'				=> Input::get('video'),
-		        'user_id'   		=> Auth::user()->id,
 		        'parent_folder_id' 	=> $parent_folder_id,
 	        );
 
