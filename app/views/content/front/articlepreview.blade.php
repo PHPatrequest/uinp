@@ -16,7 +16,7 @@
 			</div>								
 		</div>
 		<div class="col-md-12 text-justify content">															
-			{{ Common_helper::cropStr(strip_tags($article->content,470)) }}
+			{{ Common_helper::cropStr(strip_tags($article->content),470) }}
 			<div><a href="{{ $article->path }}/{{ $article->alias }}">Подробнее &#187</a></div>
 		</div>
 	</div>
