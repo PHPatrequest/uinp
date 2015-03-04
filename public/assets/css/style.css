@@ -293,6 +293,9 @@ h4{
 .pgwSlider span{
 	font-size: 14px;
 }
+.article_preview .img-thumbnail{
+	width: 90px
+}
 .img-thumbnail-small{
 	width: 50px;
 	margin: 5px 10px 0 0;
