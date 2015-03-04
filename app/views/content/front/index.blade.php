@@ -45,7 +45,7 @@
 					</div>
 					<div class="recent-news col-md-6">
 					@foreach ($articles as $key => $article)
-						@if($key == 10))
+						@if($key == 10)
 							</div>
 							<div class="recent-news col-md-6">
 						@endif
