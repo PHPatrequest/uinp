@@ -46,7 +46,7 @@ class FrontController extends BaseController {
 		}
 
 		$worldNews 		= $this->getChildren('world_news',4);
-		$importantNews 	= $this->getChildren('important_news',5);	
+		$importantNews 	= $this->getChildren('important_news',4);	
 
 		$articles = $model->getLastarticles();
 		$seoData = $this->seo;	

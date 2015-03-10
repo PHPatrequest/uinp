@@ -117,4 +117,17 @@ class Article extends \Eloquent {
         }          
     }
 
+    /**
+     * Get article with seo by id
+     *
+     * @return Obj  
+     */
+    public function getArticleWhithSeo($id){
+        $result =  DB::table('articles')->select('articles.*','seo.keywords','seo.description','seo.img_alt','seo.img_title','seo.id as seoid')                    
+                    ->leftjoin('seo','seo.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'seo.table = "articles"'))
+                    ->where('articles.id',$id)
+                    ->first();
+        return $result;
+    }
+
 }

@@ -83,7 +83,7 @@ class SeoController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function postStore()
+	public function postStore($itemId='')
 	{
 		$validator = Validator::make(Input::all(), $this->rules);
 
@@ -94,8 +94,10 @@ class SeoController extends BaseController {
 			$model = new Seo;
 			$url = Input::get('url');
 			$table = Input::get('table');
-			$itemId = Input::get('item_id');
 			$title = Input::get('title');
+			if(empty($itemId)){
+				$itemId = Input::get('item_id');				
+			}
  
   			$model->title 		= isset($title)?$title:'';
 	        $model->keywords   	= Input::get('keywords');
@@ -104,7 +106,7 @@ class SeoController extends BaseController {
 	        $model->img_title 	= Input::get('img_title');
 	        $model->url   		= !empty($url)?$url:'';
 	        $model->table 		= !empty($table)?$table:'';
-	        $model->item_id 	= !empty($itemId)?$itemId:'';
+	        $model->item_id 	= $itemId;
 
         	$model->save();
 		}

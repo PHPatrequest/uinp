@@ -2,6 +2,10 @@ body, .top20{
 	margin-top: 20px;
 }
 
+textarea.form-control.hgt100{
+    height: 100px;
+}
+
 .left10{
 	margin-left: 10px;
 }
@@ -84,4 +88,13 @@ input[type=checkbox] {
 }
 .table th{
     min-width: 160px;
+}
+.seocont{
+    display: none;
+}
+.pointer{
+    cursor: pointer;
+}
+.seotoggle{
+    margin-left: 15px;
 }

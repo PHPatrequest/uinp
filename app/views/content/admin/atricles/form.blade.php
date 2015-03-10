@@ -64,8 +64,39 @@
         </div>
     </div>
 
+    <!-- SEO -->
+    <div class="row">
+        <h4 class="fa fa-plus pointer seotoggle"> SEO</h4>
+        <div class="seocont">
+            <div class='form-group col-md-6'>
+                {{ Form::label('keywords', 'Keywords') }}
+                {{ Form::textarea('keywords', null, ['class' => 'form-control hgt100']) }}
+            </div>
+
+            <div class='form-group col-md-6'>
+                {{ Form::label('description', 'Description') }}
+                {{ Form::textarea('description', null, ['class' => 'form-control hgt100']) }}
+            </div>
+
+            <div class='form-group col-md-6'>
+                {{ Form::label('img_alt', 'Image alt') }}
+                {{ Form::text('img_alt', null, ['class' => 'form-control']) }}
+            </div>
+
+            <div class='form-group col-md-6'>
+                {{ Form::label('img_title', 'Image title') }}
+                {{ Form::text('img_title', null, ['class' => 'form-control']) }}
+            </div>
+
+            {{ Form::hidden('seoid', null, ['class' => 'form-control']) }}
+            {{ Form::hidden('table', 'articles', ['class' => 'form-control']) }}
+        </div>
+    </div>
+    <!-- end seo -->
+
     <div class='form-group'>
-        {{ Form::textarea('content', null, ['class' => 'form-control']) }}
+        {{ Form::label('content', 'Text') }}
+        {{ Form::textarea('content', null, ['class' => 'form-control article-textarea']) }}
     </div>
 
     <div class="row">
@@ -104,7 +135,7 @@
 
     <script type="text/javascript">
         tinymce.init({
-            selector: "textarea",
+            selector: ".article-textarea",
             height : 300,
             plugins: [
                 "advlist autolink lists link image charmap print preview anchor textcolor",
@@ -170,7 +201,12 @@
                 $('#imgInp').val('');
                 $('#image_path').val('');
                 $('#image_thumb').val('');
-            });                
+            });
+
+            $('.seotoggle').on('click',function(){
+                $(this).parent().find('.seocont').slideToggle();
+                $(this).toggleClass('fa-minus');
+            });
         });
     </script>
 @stop

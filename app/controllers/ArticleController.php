@@ -93,7 +93,9 @@ class ArticleController extends \BaseController {
         	$TagController = new TagController;
         	$TagController->addTags($tags,'articles',$model->id);
 
-        	$this->saveAlias(Input::get('alias'),$model->id,'articles',$parent_folder_id);  	
+        	$this->saveAlias(Input::get('alias'),$model->id,'articles',$parent_folder_id);  
+
+        	$this->saveSeo($model->id);	
 		}
 		Session::flash('success', 'Successfully created!');
 		return Redirect::to('admin/articles');
@@ -132,9 +134,13 @@ class ArticleController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function getEdit($id)
+	public function getEdit($id='')
 	{
-		$article = Article::find($id);
+		if(empty($id)){
+			App::abort(404);
+		}
+		$model = new Article;
+		$article = $model->getArticleWhithSeo($id);
 		if(!empty($article)){
 			$folders = Folder::all();
 			$TagController = new TagController;
@@ -208,9 +214,35 @@ class ArticleController extends \BaseController {
         	} else {
         		$this->saveAlias(Input::get('alias'),$model->id,'articles',$parent_folder_id);
         	}
+
+        	$this->saveSeo($id);
 		}
 		Session::flash('success', 'Successfully updated!');
 		return Redirect::to('admin/articles');
+	}
+
+	/**
+	 * Save seo data
+	 *
+	 * @return Bool
+	 */
+	private function saveSeo($itemId=''){
+			$keywords = Input::get('keywords');
+			$description = Input::get('description');
+			$img_alt = Input::get('img_alt');
+			$img_title = Input::get('img_title');
+
+			if(!empty($keywords) || !empty($description) || !empty($img_alt) || !empty($img_title)){
+				$seo = new SeoController;
+		    	$seoid = Input::get('seoid');
+        		if(!empty($seoid)){
+        			$seo->putUpdate($seoid);
+        		} else if(!empty($itemId)) {
+        			$seo->postStore($itemId);        			
+        		}
+        		return true;
+        	}
+        	return false;
 	}
 
 	/**
