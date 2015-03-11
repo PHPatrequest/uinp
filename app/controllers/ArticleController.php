@@ -81,7 +81,7 @@ class ArticleController extends \BaseController {
 			if (Input::hasFile('userfile')) {
 				$image = Common_helper::fileUpload(Input::file('userfile'),'articles/'.$model->alias,Input::get('alias'));			
 				if(isset($image['errors'])){
-					return Redirect::back()->withErrors($image['errors'])->withInput();
+					return Redirect::back()->withErrors($image['errors'])->withInput(Input::except('userfile'));
 				}			
 				$model->image 			= $image['path'];
 		    	$model->thumb			= $this->createThumb($image);
@@ -173,7 +173,7 @@ class ArticleController extends \BaseController {
 		$validator = Validator::make($data = Input::all(), $this->rules);
 		if ($validator->fails())
 		{
-			return Redirect::back()->withErrors($validator)->withInput();
+			return Redirect::back()->withErrors($validator)->withInput(Input::except('userfile'));
 		} else {
 
 			$data = array(
@@ -191,7 +191,7 @@ class ArticleController extends \BaseController {
 			if (Input::hasFile('userfile')) {
 				$image = Common_helper::fileUpload(Input::file('userfile'),'articles/'.$data['alias'],Input::get('alias'));
 				if(isset($image['errors'])){
-					return Redirect::back()->withErrors($image['errors'])->withInput();
+					return Redirect::back()->withErrors($image['errors'])->withInput(Input::except('userfile'));
 				}
 		        $data['image'] = $image['path'];
 		        $data['thumb'] = $this->createThumb($image);
