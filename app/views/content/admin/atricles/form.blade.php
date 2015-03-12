@@ -107,7 +107,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Media <i class="fa fa-times delete_image pull-right" title="Delete"></i></div>
                 <div class="panel-body">
-                    <div class="upload_img_cont form-group">                        
+                    <div class="upload_img_cont form-group">                                             
                         <img id="img_preview" src="{{ !empty($article->image)?'/'.$article->image:'/assets/images/no-image.jpg' }}" alt="your image" /><br><br>
                         {{ Form::file('userfile', ['id' => 'imgInp']) }}
                         <input type="hidden" name="image" id="image_path" value="{{ !empty($article->image)?$article->image:'' }}">
@@ -115,7 +115,7 @@
                 <div>
             </div>
             <div class='form-group'>
-                {{ Form::label('video', 'Video') }}
+                {{ Form::label('video', 'Video (youtube identifier)') }}
                 {{ Form::text('video', null, ['class' => 'form-control', 'id' => 'video']) }}
             </div>
         </div>
@@ -128,8 +128,10 @@
 @stop
 
 @section('scripts')
-    <script type="text/javascript" src="{{ asset('packages/tinymce/tinymce.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('packages/jq_tags_input/jquery.tagsinput.min.js') }}"></script>   
+    <link rel="stylesheet" type="text/css" href="/packages/fancyBox/jquery.fancybox.css" media="screen" />
+    <script type="text/javascript" src="/packages/fancyBox/jquery.fancybox.pack.js"></script>
+    <script type="text/javascript" src="/packages/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="/packages/jq_tags_input/jquery.tagsinput.min.js"></script>   
     <script type="text/javascript" src="//vk.com/js/api/openapi.js"></script>
     <script type="text/javascript"> VK.init({apiId:4776567});</script>
 
@@ -137,17 +139,21 @@
         tinymce.init({
             selector: ".article-textarea",
             height : 300,
+            relative_urls: false,
             plugins: [
-                "advlist autolink lists link image charmap print preview anchor textcolor",
+                "advlist autolink lists link image responsivefilemanager charmap print preview anchor textcolor",
                 "searchreplace visualblocks code fullscreen",
                 "insertdatetime media table contextmenu paste jbimages, pagebreak"
             ],
+            external_filemanager_path:"/packages/filemanager/",
+            filemanager_title:"Менеджер файлов" ,
+            external_plugins: { "filemanager" : "/packages/tinymce/plugins/responsivefilemanager/plugin.min.js"},
             pagebreak_separator: "<pagebreak>",
             //outdent indent
-            toolbar: "insertfile undo redo | styleselect | fontsizeselect | fontselect | backcolor | forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image jbimages",
+            toolbar: "insertfile undo redo | styleselect | fontsizeselect | fontselect | backcolor | forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image responsivefilemanager",
             relative_urls: false,
             //resize: false,
-            forced_root_block : 'div'
+            forced_root_block : 'div',
         });
 
         function readURL(input) {
@@ -183,7 +189,7 @@
                 }
                 $('#article-alias-input').val(link);
             }
-        }  
+        } 
 
         $(document).ready(function(){
             $('body').on('change','#imgInp',function(){
@@ -206,6 +212,13 @@
             $('.seotoggle').on('click',function(){
                 $(this).parent().find('.seocont').slideToggle();
                 $(this).toggleClass('fa-minus');
+            });
+
+            $('.iframe-btn').fancybox({ 
+                'width'     : '100%',
+                'height'    : '600px',
+                'type'      : 'iframe',
+                'autoScale' : false
             });
         });
     </script>

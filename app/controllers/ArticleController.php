@@ -79,7 +79,7 @@ class ArticleController extends \BaseController {
 
 			$image = '';
 			if (Input::hasFile('userfile')) {
-				$image = Common_helper::fileUpload(Input::file('userfile'),'articles/'.$model->alias,Input::get('alias'));			
+				$image = Common_helper::fileUpload(Input::file('userfile'),'articles',Input::get('alias'));			
 				if(isset($image['errors'])){
 					return Redirect::back()->withErrors($image['errors'])->withInput(Input::except('userfile'));
 				}			
@@ -266,7 +266,7 @@ class ArticleController extends \BaseController {
 	 * @return string
 	*/
 	private function createThumb($image){
-		$thumbPath = 'uploads/articles/thumbs/thumb_'.$image['name'];
+		$thumbPath = 'uploads/thumbs/thumb_'.$image['name'];
 		Image::make($image['path'], 
 			array(
 				'width' 	=> 80,
