@@ -33,4 +33,11 @@ class Folder extends \Eloquent {
         return $folders;
 	}
 
+    public function getFoldersByParentId($parenId){
+        $folders =  DB::table('folders')
+                ->where('parent_folder_id',$parenId)
+                ->paginate(20);
+        return $folders;                
+    }
+
 }

@@ -78,9 +78,11 @@ class FrontController extends BaseController {
 				$item->img_title = $this->seo->img_title;
 			}											
 
-			if($item->table=='folders'){				
+			if($item->table=='folders'){
+				$model = new Folder;
+				$folders = 	$model->getFoldersByParentId($item->id);			
 				$children = $this->getChildren($item->alias);
-				return View::make('content.front.folder',compact('item','children','breadcrumb'));
+				return View::make('content.front.folder',compact('item','folders','children','breadcrumb'));
 			} else {
 				$model = new Comment;
 				$comments = $model->getCommentsByElement($item->table,$item->id);

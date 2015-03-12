@@ -22,7 +22,14 @@
 					</div>
 				@endif
 			@endif	
-			@if (count($children))
+			@if (count($folders))
+				@foreach ($folders as $folder)
+					<div class="col-md-12">
+						@include('content.front.folderpreview')
+					</div>
+				@endforeach
+				{{ $folders->links() }}
+			@elseif (count($children))
 				@foreach ($children as $article)
 					<div class="col-md-12">
 						@include('content.front.articlepreview')
