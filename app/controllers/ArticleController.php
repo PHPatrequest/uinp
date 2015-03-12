@@ -58,6 +58,10 @@ class ArticleController extends \BaseController {
 	{
 		$tags = Input::get('tags');
 		$parent_folder_id 	= Input::get('folder_id');
+
+		$content = Input::get('content');
+		$content = preg_replace('/<a .* <\/a>/', '', $content);
+
 		$this->rules['alias']	= 'max:255|required|unique:aliases,alias';
 		$validator = Validator::make(Input::all(), $this->rules);
 
@@ -69,7 +73,7 @@ class ArticleController extends \BaseController {
 	        $model->title   			= Input::get('title');
 	        $model->alias   			= Input::get('alias');
 	        $model->user_id 			= Auth::user()->id;    
-		    $model->content 			= Input::get('content');
+		    $model->content 			= $content;
 		    $model->video 				= Input::get('video');
 		    $model->parent_folder_id 	= $parent_folder_id;
 
@@ -165,6 +169,9 @@ class ArticleController extends \BaseController {
 		$tags = Input::get('tags');
 		$parent_folder_id 	= Input::get('folder_id');
 
+		$content = Input::get('content');
+		$content = preg_replace('/<a .* <\/a>/', '', $content);
+
 		$alias = Alias::where('item_id',$id)->where('table','articles')->first();						
 		if(!empty($alias)){		
 			$this->rules['alias']	= 'max:255|required|unique:aliases,alias,'.$alias->id;
@@ -179,7 +186,7 @@ class ArticleController extends \BaseController {
 			$data = array(
 		        'title'   			=> Input::get('title'),
 		        'alias'   			=> Input::get('alias'),
-		        'content'			=> Input::get('content'),
+		        'content'			=> $content,
 		        'video'				=> Input::get('video'),
 		        'parent_folder_id' 	=> $parent_folder_id,
 	        );
