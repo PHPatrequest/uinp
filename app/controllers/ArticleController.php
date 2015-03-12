@@ -61,7 +61,6 @@ class ArticleController extends \BaseController {
 
 		$content = Input::get('content');
 		$content = preg_replace('/<a.*<\/a>/','',$content);
-		var_dump($content); exit;
 
 		$this->rules['alias']	= 'max:255|required|unique:aliases,alias';
 		$validator = Validator::make(Input::all(), $this->rules);
