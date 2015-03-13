@@ -52,13 +52,16 @@
         selector: "textarea",
         height : 300,
         plugins: [
-            "advlist autolink lists link image charmap print preview anchor textcolor",
+            "advlist autolink lists link responsivefilemanager image charmap print preview anchor textcolor",
             "searchreplace visualblocks code fullscreen",
             "insertdatetime media table contextmenu paste jbimages, pagebreak"
         ],
+        external_filemanager_path:"/packages/filemanager/",
+        filemanager_title:"Менеджер файлов" ,
+        external_plugins: { "filemanager" : "/packages/tinymce/plugins/responsivefilemanager/plugin.min.js"},
         pagebreak_separator: "<pagebreak>",
         //outdent indent
-        toolbar: "insertfile undo redo | styleselect | fontsizeselect | fontselect | backcolor | forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image jbimages",
+        toolbar: "insertfile undo redo | styleselect | fontsizeselect | fontselect | backcolor | forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image jbimages responsivefilemanager",
         relative_urls: false,
         //resize: false,
         forced_root_block : 'div'

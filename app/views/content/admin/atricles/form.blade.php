@@ -150,7 +150,7 @@
             external_plugins: { "filemanager" : "/packages/tinymce/plugins/responsivefilemanager/plugin.min.js"},
             pagebreak_separator: "<pagebreak>",
             //outdent indent
-            toolbar: "insertfile undo redo | styleselect | fontsizeselect | fontselect | backcolor | forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image responsivefilemanager",
+            toolbar: "insertfile undo redo | styleselect | fontsizeselect | fontselect | backcolor | forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image jbimages responsivefilemanager",
             relative_urls: false,
             //resize: false,
             forced_root_block : 'div',
