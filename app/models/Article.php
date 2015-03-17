@@ -133,4 +133,23 @@ class Article extends \Eloquent {
         return $result;
     }
 
+    /**
+     * Get arhiv articles 
+     *
+     * @param  string  $date
+     * @return Obj  
+     */
+    public function getArticleByDate($date){
+        return DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
+                    ->where('articles.created_at', 'LIKE', '%'.$date.'%')
+                    ->join('folders','folders.id','=','articles.parent_folder_id')
+                    ->join('users','users.id','=','articles.user_id')
+                    ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
+                    ->where('articles.published_at','!=','0000-00-00 00:00:00')
+                    ->groupBy('articles.id')
+                    ->orderby('id','DESC')
+                    ->paginate(10)
+                    ->appends(array('arhiv' => $date));
+    }
+
 }

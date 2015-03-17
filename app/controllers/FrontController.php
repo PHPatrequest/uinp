@@ -45,6 +45,13 @@ class FrontController extends BaseController {
 			return View::make('content.front.search',compact('articles','search','breadcrumb'));
 		}
 
+		$arhiv = Input::get('arhiv');
+		if(!empty($arhiv)){			
+			$articles = $model->getArticleByDate($arhiv);
+			$breadcrumb = View::make('content.front.breadcrumb',array('items'=>'<li><span>Архив: '.$arhiv.'</span></li>'));
+			return View::make('content.front.arhiv',compact('articles','arhiv','breadcrumb'));
+		}
+
 		$worldNews 		= $this->getChildren('world_news',4);
 		$importantNews 	= $this->getChildren('important_news',4);	
 
