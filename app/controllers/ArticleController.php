@@ -60,7 +60,9 @@ class ArticleController extends \BaseController {
 		$parent_folder_id 	= Input::get('folder_id');
 
 		$content = Input::get('content');
-		$content = preg_replace('/<a.*<\/a>/','',$content);
+		if(Input::get('removelinks')){
+			$content = preg_replace('/<a.*<\/a>/','',$content);
+		}
 
 		$this->rules['alias']	= 'max:255|required|unique:aliases,alias';
 		$validator = Validator::make(Input::all(), $this->rules);
@@ -170,7 +172,9 @@ class ArticleController extends \BaseController {
 		$parent_folder_id 	= Input::get('folder_id');
 
 		$content = Input::get('content');
-		$content = preg_replace('/<a.*<\/a>/', '', $content);
+		if(Input::get('removelinks')){
+			$content = preg_replace('/<a.*<\/a>/','',$content);
+		}
 
 		$alias = Alias::where('item_id',$id)->where('table','articles')->first();						
 		if(!empty($alias)){		

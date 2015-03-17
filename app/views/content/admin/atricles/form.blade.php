@@ -24,6 +24,10 @@
             {{ Form::label('publishnow', 'Publish now') }}
             {{ Form::checkbox('publishnow', 1, true) }}
         </div>
+        <div class='form-group pull-left' style="margin: 32px 0 0 10px;">
+            {{ Form::label('removelinks', 'Remove links') }}
+            {{ Form::checkbox('removelinks', 1, true) }}
+        </div>
 
         <div class='form-group pull-right top20 left10'>
             @if (Request::segment(3)=='create')
