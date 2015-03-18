@@ -164,17 +164,20 @@ h4{
 	padding: 10px 0px 0px 0px;
 	border-top: 1px solid #E6E6E6;
 }
-.article_preview {
+.article_preview, .folder_preview {
 	margin: 10px 0;
 	padding: 10px;
 	border: 1px solid #ECEDE8;
 }
-.article_preview h2{
+.folder_preview{
+	margin: 5px 0;
+}
+.preview h2{
 	font-size: 14px;
 	font-weight: bold;
 	margin: 0;
 }
-.article_preview img{
+.preview img{
 	margin-right: 10px;
 }
 .date{

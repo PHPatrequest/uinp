@@ -1,4 +1,4 @@
-<div class="article_preview">
+<div class="preview article_preview">
 	<div class="row">
 		<div class="col-md-12" style="overflow: hidden;">
 			@if(!empty($article->thumb))
