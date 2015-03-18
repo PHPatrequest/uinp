@@ -16,7 +16,7 @@
 
 				@if(!empty($item->text))
 					<div class="row"> 
-						<div class="col-md-12 text-justify">
+						<div class="col-md-12 text-justify folder-desc">
 							{{ $item->text }}
 						</div>
 					</div>

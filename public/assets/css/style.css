@@ -382,6 +382,9 @@ h4{
 	max-width: 100%;
 	height: auto;
 }
+.folder-desc {
+ 	padding-left: 30px;
+}
 
 @media (max-width: 992px){
 	.comment .content textarea{
