@@ -13,7 +13,8 @@
 						<h1>{{ $item->title }}</h1>
 					</div>
 				</div>
-
+			@endif	
+			@if (count($folders))
 				@if(!empty($item->text))
 					<div class="row"> 
 						<div class="col-md-12 text-justify folder-desc">
@@ -21,8 +22,6 @@
 						</div>
 					</div>
 				@endif
-			@endif	
-			@if (count($folders))
 				@foreach ($folders as $folder)
 					<div class="col-md-12">
 						@include('content.front.folderpreview')
@@ -36,6 +35,13 @@
 					</div>
 				@endforeach
 				{{ $children->links() }}
+				@if(!empty($item->text))
+					<div class="row"> 
+						<div class="col-md-12 text-justify folder-desc">
+							{{ $item->text }}
+						</div>
+					</div>
+				@endif
 			@endif
 		</div>
 		<div class="col-md-4">
