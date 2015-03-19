@@ -192,14 +192,16 @@ h4{
 	background: #FFF;
 	color: #9f9f9f;
 	font-size: 11px;
-	line-height: 0px;
 	text-transform: uppercase;
 	border-bottom: 1px solid #ECEDE8;
-	padding: 17px 0;
+	padding: 10px 0 0 0;
+	overflow: hidden;
+
 }
 .breadcrumb li{
 	float: left;
 	list-style: none;
+	height: 20px;
 }
 .breadcrumb li:first-child a{
 	background: none;
