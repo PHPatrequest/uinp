@@ -50,61 +50,100 @@ class ArticleController extends \BaseController {
 	}
 
 	/**
-	 * Store a newly created article in storage.
+	 * Store an article in the storage.
 	 *
 	 * @return Response
 	 */
-	public function postStore()
+	public function postStore($data='')
 	{
-		$tags = Input::get('tags');
-		$parent_folder_id 	= Input::get('folder_id');
+		$this->rules['alias']	= 'max:255|required|unique:aliases,alias';
 
-		$content = Input::get('content');
-		if(Input::get('removelinks')){
-			$content = preg_replace('/<a.*<\/a>/','',$content);
+		if(empty($data)){
+			$tags 				= Input::get('tags');
+			$parentFolderId 	= Input::get('folder_id');
+			$title 				= Input::get('title');
+			$alias 				= Input::get('alias');
+			$userId				= Auth::user()->id;
+			$content 			= Input::get('content');
+			$publish 			= Input::get('publishnow');
+			$video 				= Input::get('video');
+			$removeLinks 		= Input::get('removelinks');
+
+			$socialParams['bufferapp'] 	= Input::get('bufferapp');
+			$socialParams['vk'] 		= Input::get('vkcheckbox');
+
+			if(Input::hasFile('userfile')) {
+				$image = Common_helper::fileUpload(Input::file('userfile'),'articles',$alias);
+			}	
+			$validator = Validator::make(Input::all(), $this->rules);
+		} else {
+			$tags 				= '';
+			$video				= '';
+			$parentFolderId 	= $data['parent_folder_id'];
+			$title 				= $data['title'];
+			$alias 				= $data['alias'];
+			$userId				= $data['user_id'];
+			$content 			= $data['content'];
+			$publish 			= $data['publish'];
+			$removeLinks 		= $data['removelinks'];
+			$image 				= $data['image'];
+
+			$socialParams['bufferapp'] 	= $data['bufferapp'];
+			$socialParams['vk'] 		= $data['vk'];
+
+			$validator = Validator::make($data, $this->rules);
 		}
 
-		$this->rules['alias']	= 'max:255|required|unique:aliases,alias';
-		$validator = Validator::make(Input::all(), $this->rules);
-
-		if ($validator->fails())
-		{
-			return Redirect::back()->withErrors($validator)->withInput(Input::except('userfile'));
+		if ($validator->fails()){
+			if(empty($data)){
+				return Redirect::back()->withErrors($validator)->withInput(Input::except('userfile'));
+			}  
+			return false;
 		} else {			
 			$model = new Article;
-	        $model->title   			= Input::get('title');
-	        $model->alias   			= Input::get('alias');
-	        $model->user_id 			= Auth::user()->id;    
-		    $model->content 			= $content;
-		    $model->video 				= Input::get('video');
-		    $model->parent_folder_id 	= $parent_folder_id;
+	        $model->title   			= $title;
+	        $model->alias   			= $alias;
+	        $model->user_id 			= $userId;  
+		    $model->video 				= $video;
+		    $model->parent_folder_id 	= $parentFolderId;
 
-		    if(Input::get('publishnow')){
+		    if($removeLinks == 1){
+				$model->content = preg_replace('/<a.*<\/a>/','',$content);
+			} else {
+				$model->content = $content;
+			}
+		    if($publish == 1){
 		    	$model->published_at = date('Y-m-d H:i:s');
 		    }	    
 
-			$image = '';
-			if (Input::hasFile('userfile')) {
-				$image = Common_helper::fileUpload(Input::file('userfile'),'articles',Input::get('alias'));			
+			if(isset($image) && !empty($image)){		
 				if(isset($image['errors'])){
-					return Redirect::back()->withErrors($image['errors'])->withInput(Input::except('userfile'));
+					if(empty($data)){
+						return Redirect::back()->withErrors($image['errors'])->withInput(Input::except('userfile'));
+					}
+					return false;
 				}			
-				$model->image 			= $image['path'];
-		    	$model->thumb			= $this->createThumb($image);
+				$model->image 		= $image['path'];
+				if(!empty($image['path'])){
+		    		$model->thumb 	= $this->createThumb($image);
+		    	}
 			}
         	$model->save();
+  
+        	if(empty($data)){
+	        	$TagController = new TagController;
+	        	$TagController->addTags($tags,'articles',$model->id);
 
-        	$this->postSocNetworks($model,$tags);
-
-        	$TagController = new TagController;
-        	$TagController->addTags($tags,'articles',$model->id);
-
-        	$this->saveAlias(Input::get('alias'),$model->id,'articles',$parent_folder_id);  
-
-        	$this->saveSeo($model->id);	
+	        	$this->saveSeo($model->id);	
+	        }  
+	        $this->postSocNetworks($model,$tags,$socialParams);
+        	$this->saveAlias($alias,$model->id,'articles',$parentFolderId);  	
 		}
-		Session::flash('success', 'Successfully created!');
-		return Redirect::to('admin/articles');
+		if(empty($data)){
+			Session::flash('success', 'Successfully created!');
+			return Redirect::to('admin/articles');
+		}
+		return true;
 	}
 
 	/**
@@ -113,7 +152,7 @@ class ArticleController extends \BaseController {
 	 * @param  Article  $model
 	 * @return none
 	 */
-	private function postSocNetworks($model,$tags){
+	private function postSocNetworks($model,$tags,$params){
 		$text = $model->content;
 
 		$link = '';
@@ -122,10 +161,10 @@ class ArticleController extends \BaseController {
 			$link = URL::to('/').'/'.$parentPath.'/'.$model->alias;		
 		}
 		
-		if(Input::get('bufferapp')){
+		if($params['bufferapp']==1){
 			$this->bufferapp($text, $model->image, $model->thumb, $link);			
 		}
-		if(Input::get('vkcheckbox')){
+		if($params['vk']==1){
 			if(!empty($link)){
 				$text = $link." \n".$text;
 				$text = $model->title." \n".$text;

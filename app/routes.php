@@ -42,7 +42,8 @@ Route::group(array('before' => 'is_admin'), function() {
      Route::controller('admin/comments','CommentController');
      Route::controller('admin/tags','TagController');
      Route::controller('admin/menus', 'MenuController');
-     Route::controller('admin/users', 'UserController');  
+     Route::controller('admin/users', 'UserController');
+     Route::controller('admin/parser', 'ParserController');  
 });
 
 

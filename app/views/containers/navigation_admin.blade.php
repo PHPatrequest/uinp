@@ -29,7 +29,8 @@
                   </ul>
                 </li>
                 <li class="{{ Request::segment(2)=='menus'?'active':'' }}">{{ link_to('admin/menus','Menus') }}</li>
-                <li class="{{ Request::segment(2)=='users'?'active':'' }}">{{ link_to('admin/users','Users') }}</li>                                
+                <li class="{{ Request::segment(2)=='users'?'active':'' }}">{{ link_to('admin/users','Users') }}</li>
+                <li class="{{ Request::segment(2)=='parser'?'active':'' }}">{{ link_to('admin/parser','Parser') }}</li>                                 
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>

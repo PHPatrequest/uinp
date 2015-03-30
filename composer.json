@@ -5,10 +5,10 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*",
-		"folklore/image": "0.1.*"
+		"folklore/image": "0.1.*",
+		"yandex/translate-api": "~1.0"
 	},
 	"require-dev": {
-    	//"way/generators": "2.*"
 	},
 	"autoload": {
 		"classmap": [
