@@ -153,10 +153,10 @@ class ParserController extends BaseController {
 	}
 
 	public function getParse(){
-		$model = new Settings;
-		$settings = $model->first();
-		if($settings->parser_busy == 0){
-			$model->update(array('parser_busy'=>1));
+		// $model = new Settings;
+		// $settings = $model->first();
+		// if($settings->parser_busy == 0){
+		//	$model->update(array('parser_busy'=>1));
 			header('Content-Type: text/html; charset=utf-8');
 			$parserData = Parser::all();
 			if(!empty($parserData)){
@@ -182,10 +182,10 @@ class ParserController extends BaseController {
 			if(isset($messages)){
 				Session::flash('success', implode('<br>',$messages));
 			}
-			$model->update(array('parser_busy'=>0));		
-		} else {
-			Session::flash('error', 'Parser busy');	
-		}
+		//	$model->update(array('parser_busy'=>0));		
+		// } else {
+		// 	Session::flash('error', 'Parser busy');	
+		// }
 		return Redirect::to('/admin/parser');
 	}
 
