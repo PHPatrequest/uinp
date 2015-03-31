@@ -28,6 +28,10 @@
                 {{ Form::label('author', 'Author') }}
                 {{ Form::select('author', $users,isset($parser->author)?$parser->author:'',array('class'=>'form-control')); }}
             </div>
+            <div class='form-group col-md-12'>
+                {{ Form::label('min_chars', 'Minimal chars') }}
+                {{ Form::text('min_chars',null,array('class'=>'form-control', 'placeholder' => 'Minimal chars',)); }}
+            </div>
         </div>
         
         <div class="col-md-5">

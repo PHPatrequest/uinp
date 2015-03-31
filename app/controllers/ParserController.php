@@ -76,6 +76,7 @@ class ParserController extends BaseController {
 	        $model->bufferapp   	= Input::get('bufferapp')?1:0;
 	        $model->vk   			= Input::get('vk')?1:0;
 	        $model->folder_id 		= Input::get('folder_id');
+	        $model->min_chars 		= Input::get('min_chars');
         	$model->save();
 		}
 
@@ -129,6 +130,7 @@ class ParserController extends BaseController {
 	        	'bufferapp'   		=> Input::get('bufferapp'),
 	        	'vk'   				=> Input::get('vk'),
 	        	'folder_id' 		=> Input::get('folder_id'),
+	        	'min_chars'			=> Input::get('min_chars'),
 	        );	        
 
         	$model->update($data);
@@ -216,6 +218,9 @@ class ParserController extends BaseController {
 				$article['content'] = $this->yandexTranslate((string)$entry->description);
 			} else {
 				$article['content'] = (string)$entry->description; 
+			}
+			if($parserRow->min_chars>0 && strlen($article['content'])<$parserRow->min_chars){
+				continue;
 			}
 		    $article['user_id'] 	= $parserRow->author;
 		    $article['created_at']	= date('Y-m-d H:i:s');
