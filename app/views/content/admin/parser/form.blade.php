@@ -31,29 +31,33 @@
         </div>
         
         <div class="col-md-5">
-            <div class="form-group col-md-4" style="margin-top:30px">
+            <div class="form-group col-md-4" style="margin-top:30px">                
+                {{ Form::checkbox('publish', 1, null, ['id' => 'publish']) }}
                 {{ Form::label('publish', 'Publish now') }}
-                {{ Form::checkbox('publish', 1, null, ['placeholder' => 'Publish now']) }}
             </div>
-            <div class="form-group col-md-4" style="margin-top:30px">
+            <div class="form-group col-md-4" style="margin-top:30px">                
+                {{ Form::checkbox('translate', 1, null, ['id' => 'translate']) }}
                 {{ Form::label('translate', 'Translate') }}
-                {{ Form::checkbox('translate', 1, null, ['placeholder' => 'Translate']) }}
             </div>
-            <div class="form-group col-md-4" style="margin-top:30px">
+            <div class="form-group col-md-4" style="margin-top:30px">            
+                {{ Form::checkbox('remove_links', 1, null, ['id' => 'remove_links']) }}
                 {{ Form::label('remove_links', 'Remove links') }}
-                {{ Form::checkbox('remove_links', 1, null, ['placeholder' => 'Remove links']) }}
             </div>
-            <div class="form-group col-md-4" style="margin-top:30px">
+            <div class="form-group col-md-4" style="margin-top:30px">                
+                {{ Form::checkbox('disabled', 1, null, ['id' => 'disabled']) }}
                 {{ Form::label('disabled', 'Disable') }}
-                {{ Form::checkbox('disabled', 1, null, ['placeholder' => 'Disable']) }}
             </div>
-            <div class="form-group col-md-4" style="margin-top:30px">
-                {{ Form::label('bufferapp', 'Bufferapp') }}
-                {{ Form::checkbox('bufferapp', 1, null, ['placeholder' => 'Bufferapp']) }}
-            </div>
-            <div class="form-group col-md-4" style="margin-top:30px">
+            <div class="form-group col-md-4" style="margin-top:30px">                
+                {{ Form::checkbox('vk', 1, null, ['id' => 'vk']) }}
                 {{ Form::label('vk', 'VK') }}
-                {{ Form::checkbox('vk', 1, null, ['placeholder' => 'VK']) }}
+            </div>
+            <div class="form-group col-md-4" style="margin-top:30px">      
+                {{ Form::checkbox('bufferapp', 1, null, ['id' => 'bufferapp']) }}
+                {{ Form::label('bufferapp', 'Bufferapp') }}
+            </div>
+            <div class="form-group col-md-5" style="margin-top:30px">                
+                {{ Form::checkbox('only_with_images', 1, null, ['id' => 'only_with_images']) }}
+                {{ Form::label('only_with_images', 'Only with images') }}
             </div>
         </div>
         <div class="form-group col-md-12">        

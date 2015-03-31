@@ -70,6 +70,7 @@ class ParserController extends BaseController {
 	        $model->author   		= Input::get('author');
 	        $model->publish   		= Input::get('publish')?1:0;
 	        $model->translate   	= Input::get('translate')?1:0;
+	        $model->only_with_images= Input::get('only_with_images')?1:0;
 	        $model->disabled   		= Input::get('disabled')?1:0;
 	        $model->remove_links   	= Input::get('remove_links')?1:0;
 	        $model->bufferapp   	= Input::get('bufferapp')?1:0;
@@ -122,6 +123,7 @@ class ParserController extends BaseController {
 		        'author'   			=> Input::get('author'),
 		        'publish'   		=> Input::get('publish'),
 		        'translate'   		=> Input::get('translate'),
+		        'only_with_images'	=> Input::get('only_with_images'),
 		        'disabled'   		=> Input::get('disabled'),
 		       	'remove_links'   	=> Input::get('remove_links'),
 	        	'bufferapp'   		=> Input::get('bufferapp'),
@@ -233,6 +235,9 @@ class ParserController extends BaseController {
 			    	'path'	=> $imagePath,
 			    );
 			} else {
+				if($parserRow->only_with_images == 1){
+					continue;
+				}
 				$article['image'] = '';
 			}		    
 		    $articleController = new ArticleController;
