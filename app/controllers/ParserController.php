@@ -162,17 +162,27 @@ class ParserController extends BaseController {
 			if(!empty($parserData)){
 				foreach ($parserData as $parserRow) {
 					if($parserRow->disabled==0){
-						try {					
-							$rss = simplexml_load_file($parserRow->url);
-						} catch (Exception $e) {
-							$rssError = $e->getMessage();												
-						}
-						if(isset($rssError)){
-							$errors[] = $rssError;
-						} else {
-							$itemsCount = $this->storeParsed($rss,$parserRow);
-							$messages[] = 'From '.$parserRow->url.' stored '.$itemsCount.' items';
-						}
+						$curl = curl_init();
+						curl_setopt_array($curl, Array(
+						    CURLOPT_URL            => $parserRow->url,
+						    CURLOPT_RETURNTRANSFER => TRUE,
+						    CURLOPT_ENCODING       => 'UTF-8'
+						));
+						$data = curl_exec($curl);
+						curl_close($curl);
+
+						libxml_use_internal_errors(true);
+						$rss = simplexml_load_string($data);
+						//$rss = simplexml_load_file($parserRow->url);
+						$rss = simplexml_load_file($parserRow->url);
+						if ($rss === false) {
+							$error = libxml_get_errors();
+						    $errors[] = 'Error in '.$parserRow->url.' - '.$error[0]->message;
+						    continue;
+						}					
+						
+						$itemsCount = $this->storeParsed($rss,$parserRow);
+						$messages[] = 'From '.$parserRow->url.' stored '.$itemsCount.' items';
 					}
 				}
 			}
