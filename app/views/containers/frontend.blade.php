@@ -75,7 +75,7 @@
 			@yield('main')		
 		</div>
 		<div class="footer">
-			@if(isset($menu->categories))
+			@if(isset($menu->bottom))
 				{{ $menu->bottom }}
 			@endif
 		</div>			
