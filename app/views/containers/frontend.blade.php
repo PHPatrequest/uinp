@@ -66,14 +66,18 @@
 				@endif
 			</div>				
 		</div>
-		<div class="breadcrumb">			
-			{{ $breadcrumb }}
+		<div class="breadcrumb">
+			@if(isset($menu->categories))			
+				{{ $breadcrumb }}
+			@endif
 		</div>
 		<div class="main_content">
 			@yield('main')		
 		</div>
 		<div class="footer">
-			{{ $menu->categories }}
+			@if(isset($menu->categories))
+				{{ $menu->bottom }}
+			@endif
 		</div>			
 		<div class="bottom">
 			© Copyriht 2015
