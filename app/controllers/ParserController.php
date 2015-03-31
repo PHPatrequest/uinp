@@ -174,7 +174,6 @@ class ParserController extends BaseController {
 						libxml_use_internal_errors(true);
 						$rss = simplexml_load_string($data);
 						//$rss = simplexml_load_file($parserRow->url);
-						$rss = simplexml_load_file($parserRow->url);
 						if ($rss === false) {
 							$error = libxml_get_errors();
 						    $errors[] = 'Error in '.$parserRow->url.' - '.$error[0]->message;
