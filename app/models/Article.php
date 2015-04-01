@@ -60,7 +60,7 @@ class Article extends \Eloquent {
                 ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                 ->where('articles.published_at','!=','0000-00-00 00:00:00')
                 ->groupBy('articles.id')                
-                ->orderby('id','DESC')
+                ->orderby('published_at','DESC')
                 ->paginate(10)
                 ->appends(array('tags' => $tags));
     }
@@ -78,7 +78,7 @@ class Article extends \Eloquent {
                     ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                     ->where('articles.published_at','!=','0000-00-00 00:00:00')
                     ->groupBy('articles.id')
-                    ->orderby('id','DESC')
+                    ->orderby('published_at','DESC')
                     ->paginate(10)
                     ->appends(array('search' => $search));
     }
@@ -95,7 +95,7 @@ class Article extends \Eloquent {
                 ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                 ->where('articles.published_at','!=','0000-00-00 00:00:00')
                 ->groupBy('articles.id')
-                ->orderby('id','DESC')
+                ->orderby('published_at','DESC')
                 ->paginate(20);
     }
 
@@ -147,7 +147,7 @@ class Article extends \Eloquent {
                     ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                     ->where('articles.published_at','!=','0000-00-00 00:00:00')
                     ->groupBy('articles.id')
-                    ->orderby('id','DESC')
+                    ->orderby('published_at','DESC')
                     ->paginate(10)
                     ->appends(array('arhiv' => $date));
     }

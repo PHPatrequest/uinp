@@ -14,7 +14,7 @@
 				<div class="row">			
 					<div class="col-md-12">
 						<h1>{{ $item->title }}</h1>
-						<div class="entry-meta">Опубликовано {{ $item->created_at }}. Автор {{ $item->username }}</div>
+						<div class="entry-meta">Опубликовано {{ $item->published_at }}. Автор {{ $item->username }}</div>
 						@if(!empty($item->image))
 							<img src="/{{ $item->image }}" style="width:100%; max-width:300px; margin: 0 10px 0 0" class="pull-left" title="{{ $item->img_title }}" alt="{{ $item->img_alt }}">
 						@endif	

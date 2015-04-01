@@ -7,7 +7,7 @@
 <div style="overflow:hidden">
 	<a href="/{{ $article->path }}/{{ $article->alias }}">{{ $article->title }}</a>	
 	<div class="date">
-		<div>Опубликовано: {{ $article->created_at }}</div>
+		<div>Опубликовано: {{ $article->published_at }}</div>
 		<div>Комментариев: {{ isset($article->commentscount)?$article->commentscount:0 }}</div> 		
 	</div>
 </div>
