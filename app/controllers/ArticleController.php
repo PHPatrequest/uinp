@@ -379,7 +379,6 @@ class ArticleController extends \BaseController {
 		}	
 
 		$ret = $model->post('updates/create', $data);
-	var_dump($ret); exit;
 
 		/**********************************************/		
 		$data['profile_ids'] = array(Config::get('site_keys.bufferApp.twitter')); //twitter	
