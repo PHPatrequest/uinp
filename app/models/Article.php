@@ -112,7 +112,7 @@ class Article extends \Eloquent {
                     ->where('folders.alias',$parentAlias)
                     ->where('articles.published_at','!=','0000-00-00 00:00:00')
                     ->groupBy('articles.id')
-                    ->orderby('id','DESC');
+                    ->orderby('published_at','DESC');
         if($limit){
             return $result->take($limit)->get();  
         } else {
