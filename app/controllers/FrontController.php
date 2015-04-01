@@ -67,7 +67,7 @@ class FrontController extends BaseController {
 			$items = $this->getUrlElements($items);		
 			$breadcrumb = View::make('content.front.breadcrumb',compact('items'));
 
-			$item = array_pop($items);
+			$item = array_pop($items);			
 
 			if(!empty($this->seo->title)){
 				$item->title = $this->seo->title;
@@ -76,7 +76,7 @@ class FrontController extends BaseController {
 				$item->description = $this->seo->description;
 			}
 			if(!empty($this->seo->keywords)){
-				$item->description = $this->seo->keywords;
+				$item->keywords = $this->seo->keywords;
 			}
 			if(!empty($this->seo->img_alt)){
 				$item->img_alt = $this->seo->img_alt;
@@ -143,17 +143,17 @@ class FrontController extends BaseController {
 		}
 		$tablePrefix = DB::getTablePrefix();
 		$result = DB::table($element->table)
-			->select($element->table.'.*','users.username','seo.keywords','seo.description','seo.img_alt','seo.img_title', DB::raw('GROUP_CONCAT('.$tablePrefix.'tags.name) as tags'))
+			->select($element->table.'.*','users.username','seo.title as seo_title','seo.keywords','seo.description','seo.img_alt','seo.img_title', DB::raw('GROUP_CONCAT('.$tablePrefix.'tags.name) as tags'))
 			->join('users','users.id','=',$element->table.'.user_id')
 			->leftjoin('seo','seo.item_id','=',DB::raw($tablePrefix.$element->table.'.id AND '.$tablePrefix.'seo.table = "'.$element->table.'"'))
 			->leftjoin('tagstoelement','tagstoelement.element_id','=',DB::raw($tablePrefix.$element->table.'.id AND '.$tablePrefix.'tagstoelement.table = "'.$element->table.'"'))
-			->join('tags','tags.id','=','tagstoelement.tag_id')
+			->leftjoin('tags','tags.id','=','tagstoelement.tag_id')
 			->where($element->table.'.id',$element->item_id)
 			->first();
 		if(empty($result)){
 			App::abort(404);			
 		}
-		$result->table = $element->table;		
+		$result->table = $element->table;				
 		return $result;
 	}
 

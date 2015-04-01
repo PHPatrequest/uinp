@@ -1,5 +1,11 @@
 @extends('containers.frontend')
-@section('title') {{ $item->title }} @stop
+@section('title')
+	@if(!empty($item->seo_title))
+		{{ $item->seo_title }}
+	@else
+		{{ $item->title }}
+	@endif
+@stop
 @section('seoMeta')
 	<meta name="description" content="{{ $item->description }}">
 	<meta name="keywords" content="{{ $item->keywords }}">
