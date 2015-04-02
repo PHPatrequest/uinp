@@ -135,7 +135,7 @@ class FolderController extends BaseController {
 		        'text'   			=> Input::get('text'),
 		        'user_id'   		=> Auth::user()->id,
 		        'parent_folder_id' 	=> $parent_folder_id,
-		        'path'				=> $path,
+		        'path'				=> $this->getPath($parent_folder_id, $alias),
 	        );	        
 
         	$model->update($data);
