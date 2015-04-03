@@ -15,7 +15,7 @@ Route::controller('/auth', 'AuthController');
 */
 Route::post('comments/store','CommentController@postStore');
 Route::controller('cron', 'CronController');
-
+Route::get('/sitemap.xml', 'FrontController@sitemap');
 /*
 |--------------------------------------------------------------------------
 | For registered users

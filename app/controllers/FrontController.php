@@ -173,4 +173,12 @@ class FrontController extends BaseController {
 		$result = $model->getArticlesByParentAlias($parentAlias,$limit);		
 		return $result;
 	}
+
+	public function Sitemap(){
+		header("Content-Type:text/xml");
+		$folders = Folder::all();
+		$articles = DB::table('articles')->select('articles.*','folders.path')->leftjoin('folders','folders.id','=','articles.parent_folder_id')->get();
+		$content = View::make('content.front.sitemap',compact('folders','articles'));
+		return Response::make($content, '200')->header('Content-Type', 'text/xml');
+	}
 }
