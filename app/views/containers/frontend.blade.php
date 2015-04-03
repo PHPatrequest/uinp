@@ -44,7 +44,7 @@
 			</div> 	
 		</div> 
 		<div id="header">
-			<h1 class="logo">		
+			<div class="logo">		
 				<a href="/" title="" rel="home" style="color:#326693">
 					<div class="pull-left"><img src="/assets/images/uinplogo.png" style="width: 160px; margin: 10px 0 0 10px;"></div>
 					<div class="pull-left" style="font-family:impact; font-size:30px; padding:5px 0 0 20px">
@@ -53,7 +53,7 @@
 					</div>
 					<div style="clear:both"></div>
 				</a>
-			</h1>			
+			</div>			
 		</div>
 		<div class="cat-menu">
 			<div class="nav">

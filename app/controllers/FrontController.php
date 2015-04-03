@@ -56,9 +56,11 @@ class FrontController extends BaseController {
 		$importantNews 	= $this->getChildren('important_news',4);	
 
 		$articles = $model->getLastarticles();
-		$seoData = $this->seo;	
+		$seoData = $this->seo;
+
+		$mainArticle = Article::where('alias','na_glavnoi')->first();	
 		$breadcrumb = View::make('content.front.breadcrumb');
-		return View::make('content.front.index',compact('articles','importantNews','worldNews','breadcrumb','seoData'));
+		return View::make('content.front.index',compact('articles','mainArticle','importantNews','worldNews','breadcrumb','seoData'));
 	}
 
 	public function missingMethod($items = array())

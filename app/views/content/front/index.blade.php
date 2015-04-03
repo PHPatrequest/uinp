@@ -76,6 +76,10 @@
 			</div>
 		</div>
 	@endif
+	@if (isset($mainArticle) && !empty($mainArticle))
+		<h1>{{ $mainArticle->title }}</h1>
+		<div class="text-justify">{{ $mainArticle->content }}</div>
+	@endif
 @stop
 @section('styles')
 	<link rel="stylesheet" type="text/css" media="all" href="/packages/pgwSlider/pgwslider.min.css">
