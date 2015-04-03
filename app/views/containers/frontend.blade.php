@@ -46,7 +46,7 @@
 		<div id="header">
 			<div class="logo">		
 				<a href="/" title="" rel="home" style="color:#326693">
-					<div class="pull-left"><img src="/assets/images/uinplogo.png" style="width: 160px; margin: 10px 0 0 10px;"></div>
+					<div class="pull-left"><img src="/assets/images/uinplogo.png" style="width: 160px; margin: 20px 0 0 10px;"></div>
 					<div class="pull-left" style="font-family:impact; font-size:30px; padding:5px 0 0 20px">
 						<div>украинский независимый новостной портал</div>
 						<div style="color: rgb(200, 200, 200);">ukrainian independent news portal</div>
