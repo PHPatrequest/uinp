@@ -1,4 +1,4 @@
-<div class='comment'>
+<div class='comment' property="comment">
 	<div class='body'>
 		<b><i class='fa fa-user'></i> {{ $comment->username }}</b>, 
 		<span style='font-size:10px'>{{ $comment->created_at }}</span>

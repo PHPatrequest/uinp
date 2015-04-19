@@ -12,12 +12,12 @@
 @stop
 
 @section('main')
-	<div class="row">
+	<div class="row" vocab="http://schema.org/" typeof="Article">
 		<div class="col-md-8">
 			@if (isset($item) && !empty($item))
 				<div class="row">			
 					<div class="col-md-12">
-						<h1>{{ $item->title }}</h1>
+						<h1 property="name">{{ $item->title }}</h1>
 						<div class="entry-meta">
 							<div class="pull-left">
 								@if(!empty($item->userthumb))
@@ -27,17 +27,17 @@
 							<div>
 								Автор
 								@if(!empty($item->google_account)) 
-								<a href="{{ $item->google_account }}">{{ $item->username }}</a>
+									<a href="{{ $item->google_account }}" property="author">{{ $item->username }}</a>
 								@else
-									{{ $item->username }}
+									<div property="author">{{ $item->username }}</div>
 								@endif
 							</div>
-							<div>Опубликовано {{ $item->published_at }}.</div>
+							<div property="datePublished">Опубликовано {{ $item->published_at }}.</div>
 						</div>
 						@if(!empty($item->image))
-							<img src="/{{ $item->image }}" style="width:100%; max-width:300px; margin: 0 10px 0 0" class="pull-left" title="{{ $item->img_title }}" alt="{{ $item->img_alt }}">
+							<img src="/{{ $item->image }}" style="width:100%; max-width:300px; margin: 0 10px 0 0" class="pull-left" title="{{ $item->img_title }}" alt="{{ $item->img_alt }}" property="image">
 						@endif	
-						<div class="text-justify">
+						<div class="text-justify" property="description">
 							{{ $item->content }}
 						</div>
 						@if(!empty($item->video))
@@ -47,7 +47,7 @@
 							@if(!empty($item->tags))
 								<?php $tags = explode(',',$item->tags) ?>
 								@foreach($tags as $tag)
-									<a href="/?tags={{ $tag }}" class="tag fa fa-tag">{{ $tag }}</a>
+									<a href="/?tags={{ $tag }}" class="tag fa fa-tag" property="keywords">{{ $tag }}</a>
 								@endforeach
 							@endif
 						</div>
