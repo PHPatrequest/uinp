@@ -29,7 +29,7 @@
 								@if(!empty($item->google_account)) 
 									<a href="{{ $item->google_account }}" property="author">{{ $item->username }}</a>
 								@else
-									<div property="author">{{ $item->username }}</div>
+									<span property="author">{{ $item->username }}</span>
 								@endif
 							</div>
 							<div property="datePublished">Опубликовано {{ $item->published_at }}.</div>

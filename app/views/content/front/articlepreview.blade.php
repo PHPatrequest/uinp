@@ -16,7 +16,7 @@
 						@if(!empty($article->google_account)) 
 							<a href="{{ $article->google_account }}" property="author">{{ $article->username }}</a>
 						@else
-							<div property="author">{{ $article->username }}</div>
+							<span property="author">{{ $article->username }}</span>
 						@endif 
 					</div>				
 				</div>
