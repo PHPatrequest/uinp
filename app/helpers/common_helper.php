@@ -139,5 +139,23 @@ class Common_helper {
         }
  
         return $content;
-    } 
+    }
+
+    /**
+     * Escape special chars for XML
+     *
+     * @param  string $string
+     * @return string
+     */
+    public static function escapeXMLcars($string){
+        $string = strip_tags($string);
+        $string = str_replace("&laquo;","",$string);
+        $string = str_replace("&raquo;","",$string);
+        $string = str_replace(
+            array("&",     "<",    ">",    '"',      "'"),
+            array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"), 
+            $string
+        );
+        return Common_helper::cropStr(strip_tags($string),999); 
+    }
 }

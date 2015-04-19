@@ -52,6 +52,13 @@ class FrontController extends BaseController {
 			return View::make('content.front.arhiv',compact('articles','arhiv','breadcrumb'));
 		}
 
+		$rss = Input::get('rss');
+		if(!empty($rss)){			
+			$articles = $model->getLastarticles($rss);
+			$content = View::make('content.front.rss',compact('articles'));
+			return Response::make($content, '200')->header('Content-Type', 'text/xml');
+		}
+
 		$worldNews 		= $this->getChildren('world_news',4);
 		$importantNews 	= $this->getChildren('important_news',4);	
 

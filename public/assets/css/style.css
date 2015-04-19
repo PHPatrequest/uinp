@@ -390,6 +390,14 @@ h4{
 .folder-desc {
  	padding-left: 30px;
 }
+.rss-icon{
+	color: white;
+	margin: 3px;
+}
+.rss-icon:hover{
+	color:white;
+	text-decoration: none;
+}
 
 @media (max-width: 992px){
 	.comment .content textarea{

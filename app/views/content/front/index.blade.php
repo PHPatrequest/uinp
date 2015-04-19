@@ -36,6 +36,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="heading">
+							<div class="pull-left"><a href="?rss=last_news" class="fa fa-rss rss-icon" title="RSS"></a></div>
 							Последние новости 
 							<div class="view-style pull-right">
 								<i class="fa fa-bars" title="Список"></i>

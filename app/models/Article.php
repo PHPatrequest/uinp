@@ -89,7 +89,7 @@ class Article extends \Eloquent {
      * @return Obj  
      */
     public function getLastarticles(){
-        return DB::table('articles')->select('articles.*','folders.path','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                
+        return DB::table('articles')->select('articles.*','folders.path','folders.title as parent_title','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                
                 ->join('folders','folders.id','=','articles.parent_folder_id')
                 ->join('users','users.id','=','articles.user_id')
                 ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
