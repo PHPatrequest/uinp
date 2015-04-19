@@ -12,7 +12,7 @@ class AuthController extends BaseController {
         $username = Input::get('username');
         $password = Input::get('password');
  
-        if (Auth::attempt(['email' => $username, 'password' => $password]))
+        if (Auth::attempt(array('email' => $username, 'password' => $password)))
         {
             if(Auth::user()->role->id==1) return Redirect::to('/admin');
             return Redirect::back();

@@ -18,7 +18,22 @@
 				<div class="row">			
 					<div class="col-md-12">
 						<h1>{{ $item->title }}</h1>
-						<div class="entry-meta">Опубликовано {{ $item->published_at }}. Автор {{ $item->username }}</div>
+						<div class="entry-meta">
+							<div class="pull-left">
+								@if(!empty($item->userthumb))
+									<img src="/{{ $item->userthumb }}" style="width: 30px;  margin-right: 5px;">
+								@endif
+							</div>
+							<div>
+								Автор
+								@if(!empty($item->google_account)) 
+								<a href="{{ $item->google_account }}">{{ $item->username }}</a>
+								@else
+									{{ $item->username }}
+								@endif
+							</div>
+							<div>Опубликовано {{ $item->published_at }}.</div>
+						</div>
 						@if(!empty($item->image))
 							<img src="/{{ $item->image }}" style="width:100%; max-width:300px; margin: 0 10px 0 0" class="pull-left" title="{{ $item->img_title }}" alt="{{ $item->img_alt }}">
 						@endif	

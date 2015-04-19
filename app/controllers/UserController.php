@@ -5,7 +5,7 @@ class UserController extends BaseController {
 	protected $rules = array(
 		'username'	=> 'required|max:255',
 		'email'		=> 'required|max:255|email|unique:users,email',
-		'password'	=> 'required|max:64',	
+		'password'	=> 'required|max:64|same:password_confirmation',	
 	);
 	protected $table_fields = array(
 			'User'		=> 'username',
@@ -71,16 +71,27 @@ class UserController extends BaseController {
 			}
 			$user = new User;
  
-	        $user->username   = Input::get('username');
-	        $user->email      = Input::get('email');	        
-	        $user->password   = Hash::make(Input::get('password'));
-	        $user->role_id    = $role;
-        	$user->save();
-		}
-		if($innerRequest) return 'success';
+	        $user->username   		= Input::get('username');
+	        $user->email      		= Input::get('email');
+	        $user->google_account   = Input::get('google_account');	        
+	        $user->password   		= Hash::make(Input::get('password'));
+	        $user->role_id    		= $role;
 
-		Session::flash('success', 'User successfully created!');
-		return Redirect::to('admin/users');
+	        if(Input::hasFile('userfile')) {
+				$image = Common_helper::fileUpload(Input::file('userfile'),'users',$user->username);				
+				if(isset($image) && isset($image['errors'])){		
+					return Redirect::back()->withErrors($image['errors'])->withInput(Input::except('userfile'));	
+				}		
+				$user->image = $image['path'];
+		    	$user->thumb = $this->createThumb($image,80,80,true);
+	    	}
+			
+        	$user->save();
+			if($innerRequest) return 'success';
+
+			Session::flash('success', 'User successfully created!');
+			return Redirect::to('admin/users');
+		}
 	}
 
 	/**
@@ -136,14 +147,28 @@ class UserController extends BaseController {
 			return Redirect::back()->withErrors($validator)->withInput();
 		} else {
 			$data = array(
-		        'username'   => Input::get('username'),
-		        'email'      => Input::get('email'),
-		        'role_id'    => Input::get('role'),
-	        );	        
+		        'username'   		=> Input::get('username'),
+		        'email'      		=> Input::get('email'),
+		        'google_account'    => Input::get('google_account'),		        
+		        'role_id'    		=> Input::get('role'),
+	        );	
+	        if(Input::hasFile('userfile')) {	       	
+				$image = Common_helper::fileUpload(Input::file('userfile'),'users',$data['username']);
+
+				$data['image'] = $image['path'];
+				$data['thumb'] = $this->createThumb($image,40,40,true);
+			} else {
+				$image = Input::get('image');
+					if(empty($image)) {
+						$data['image'] = '';
+						$data['thumb'] = '';
+						unlink(public_path().'/'.$user->image);
+						unlink(public_path().'/'.$user->thumb);
+					}
+			}        
 	        if(Input::get('password')){
 	        	$data['password'] = Hash::make(Input::get('password'));
 	        }
-
         	$user->update($data);
 		}
 		Session::flash('success', 'User successfully updated!');
@@ -158,6 +183,16 @@ class UserController extends BaseController {
 	 */
 	public function deleteDestroy($id)
 	{
+		$user = User::find($id);
+		if(empty($user)){
+			App::abort(404);
+		}
+		if(!empty($user->image)){
+			unlink(public_path().'/'.$user->image);
+		}
+		if(!empty($user->thumb)){
+			unlink(public_path().'/'.$user->thumb);
+		}
 		User::destroy($id);
 		Session::flash('success', 'User successfully deleted!');
 		return Redirect::to('admin/users');

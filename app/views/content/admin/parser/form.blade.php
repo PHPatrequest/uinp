@@ -5,16 +5,16 @@
 @section('main')
 
     @if (Request::segment(3)=='create')
-        {{ Form::open(['role' => 'form', 'url' => 'admin/parser/store']) }}
+        {{ Form::open(array('role' => 'form', 'url' => 'admin/parser/store')) }}
     @else
-        {{ Form::model($parser, ['role' => 'form', 'url' => 'admin/parser/update/' . $parser->id, 'method' => 'PUT']) }}
+        {{ Form::model($parser, array('role' => 'form', 'url' => 'admin/parser/update/' . $parser->id, 'method' => 'PUT')) }}
     @endif
  
     <div style="overflow: hidden;">
         <h1 class="fa fa-edit"> {{Request::segment(3)=='create'?'Add':'Edit'}} parser data</h1>
 
         <div class='form-group pull-right top20'>
-            {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
+            {{ Form::submit('Save', array('class' => 'btn btn-primary')) }}
         </div>
     </div>
 
@@ -22,7 +22,7 @@
         <div class="col-md-5">
             <div class="form-group col-md-12">
                 {{ Form::label('url', 'RSS URL') }}
-                {{ Form::text('url', null, ['placeholder' => 'URL', 'class' => 'form-control']) }}
+                {{ Form::text('url', null, array('placeholder' => 'URL', 'class' => 'form-control')) }}
             </div>
             <div class='form-group col-md-12'>
                 {{ Form::label('author', 'Author') }}
@@ -36,31 +36,31 @@
         
         <div class="col-md-5">
             <div class="form-group col-md-4" style="margin-top:30px">                
-                {{ Form::checkbox('publish', 1, null, ['id' => 'publish']) }}
+                {{ Form::checkbox('publish', 1, null, array('id' => 'publish')) }}
                 {{ Form::label('publish', 'Publish now') }}
             </div>
             <div class="form-group col-md-4" style="margin-top:30px">                
-                {{ Form::checkbox('translate', 1, null, ['id' => 'translate']) }}
+                {{ Form::checkbox('translate', 1, null, array('id' => 'translate')) }}
                 {{ Form::label('translate', 'Translate') }}
             </div>
             <div class="form-group col-md-4" style="margin-top:30px">            
-                {{ Form::checkbox('remove_links', 1, null, ['id' => 'remove_links']) }}
+                {{ Form::checkbox('remove_links', 1, null, array('id' => 'remove_links')) }}
                 {{ Form::label('remove_links', 'Remove links') }}
             </div>
             <div class="form-group col-md-4" style="margin-top:30px">                
-                {{ Form::checkbox('disabled', 1, null, ['id' => 'disabled']) }}
+                {{ Form::checkbox('disabled', 1, null, array('id' => 'disabled')) }}
                 {{ Form::label('disabled', 'Disable') }}
             </div>
             <div class="form-group col-md-4" style="margin-top:30px">                
-                {{ Form::checkbox('vk', 1, null, ['id' => 'vk']) }}
+                {{ Form::checkbox('vk', 1, null, array('id' => 'vk')) }}
                 {{ Form::label('vk', 'VK') }}
             </div>
             <div class="form-group col-md-4" style="margin-top:30px">      
-                {{ Form::checkbox('bufferapp', 1, null, ['id' => 'bufferapp']) }}
+                {{ Form::checkbox('bufferapp', 1, null, array('id' => 'bufferapp')) }}
                 {{ Form::label('bufferapp', 'Bufferapp') }}
             </div>
             <div class="form-group col-md-5" style="margin-top:30px">                
-                {{ Form::checkbox('only_with_images', 1, null, ['id' => 'only_with_images']) }}
+                {{ Form::checkbox('only_with_images', 1, null, array('id' => 'only_with_images')) }}
                 {{ Form::label('only_with_images', 'Only with images') }}
             </div>
         </div>

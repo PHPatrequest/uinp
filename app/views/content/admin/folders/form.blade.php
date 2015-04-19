@@ -5,23 +5,23 @@
 @section('main')
 
     @if (Request::segment(3)=='create')
-        {{ Form::open(['role' => 'form', 'url' => 'admin/folders/store']) }}
+        {{ Form::open(array('role' => 'form', 'url' => 'admin/folders/store')) }}
     @else
-        {{ Form::model($folder, ['role' => 'form', 'url' => 'admin/folders/update/' . $folder->id, 'method' => 'PUT']) }}
+        {{ Form::model($folder, array('role' => 'form', 'url' => 'admin/folders/update/' . $folder->id, 'method' => 'PUT')) }}
     @endif
  
     <div style="overflow: hidden;">
         <h1 class="fa fa-edit"> {{Request::segment(3)=='create'?'Add':'Edit'}} folder</h1>
 
         <div class='form-group pull-right top20'>
-            {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
+            {{ Form::submit('Save', array('class' => 'btn btn-primary')) }}
         </div>
     </div>
 
     <div class="row">
         <div class='form-group col-md-5'>
             {{ Form::label('title', 'Title') }}
-            {{ Form::text('title', null, ['placeholder' => 'Title', 'class' => 'form-control', 'id' => 'folder-title-input']) }}
+            {{ Form::text('title', null, array('placeholder' => 'Title', 'class' => 'form-control', 'id' => 'folder-title-input')) }}
         </div>
         <div class="col-md-1 generate-alias">
             <a class="btn btn-default" onClick="generateSlug()" style="margin-top:25px">Generate</a>
@@ -29,11 +29,11 @@
 
         <div class='form-group col-md-6'>
             {{ Form::label('alias', 'Alias') }}
-            {{ Form::text('alias', null, ['placeholder' => 'Alias', 'class' => 'form-control', 'id' => 'folder-alias-input']) }}
+            {{ Form::text('alias', null, array('placeholder' => 'Alias', 'class' => 'form-control', 'id' => 'folder-alias-input')) }}
         </div>
 
         <div class='form-group col-md-12'>
-            {{ Form::textarea('text', null, ['class' => 'form-control']) }}
+            {{ Form::textarea('text', null, array('class' => 'form-control')) }}
         </div>
     </div>
 

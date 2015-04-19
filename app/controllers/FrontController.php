@@ -145,7 +145,7 @@ class FrontController extends BaseController {
 		}
 		$tablePrefix = DB::getTablePrefix();
 		$result = DB::table($element->table)
-			->select($element->table.'.*','users.username','seo.title as seo_title','seo.keywords','seo.description','seo.img_alt','seo.img_title', DB::raw('GROUP_CONCAT('.$tablePrefix.'tags.name) as tags'))
+			->select($element->table.'.*','users.username','users.google_account','users.thumb as userthumb','seo.title as seo_title','seo.keywords','seo.description','seo.img_alt','seo.img_title', DB::raw('GROUP_CONCAT('.$tablePrefix.'tags.name) as tags'))
 			->join('users','users.id','=',$element->table.'.user_id')
 			->leftjoin('seo','seo.item_id','=',DB::raw($tablePrefix.$element->table.'.id AND '.$tablePrefix.'seo.table = "'.$element->table.'"'))
 			->leftjoin('tagstoelement','tagstoelement.element_id','=',DB::raw($tablePrefix.$element->table.'.id AND '.$tablePrefix.'tagstoelement.table = "'.$element->table.'"'))

@@ -8,10 +8,10 @@
         $search_fields = array_flip($table_fields);
         $search_fields = array_combine($search_fields, $search_fields);
     ?>
-    {{ Form::open(['role' => 'form', 'url' => 'admin/users', 'method' =>'get', 'class' => 'pull-right top20 table-search-form']) }}
-        {{ Form::select('field',$search_fields,'',['class'=>'form-control pull-left']) }} 
-        {{ Form::text('search','',['class'=>'form-control pull-left']) }}
-        {{ Form::submit('Search',['class'=>'btn btn-info']) }}
+    {{ Form::open(array('role' => 'form', 'url' => 'admin/users', 'method' =>'get', 'class' => 'pull-right top20 table-search-form')) }}
+        {{ Form::select('field',$search_fields,'',array('class'=>'form-control pull-left')) }} 
+        {{ Form::text('search','',array('class'=>'form-control pull-left')) }}
+        {{ Form::submit('Search',array('class'=>'btn btn-info')) }}
     {{ Form::close() }} 
 
     @if ($users->count())
@@ -34,8 +34,8 @@
                         <td>
                             {{ link_to('admin/users/edit/'.$user->id, 'Edit', array('class' => 'btn btn-info btn-xs pull-left', 'title'=>'edit')) }}
 
-                            {{ Form::open(['url' => 'admin/users/destroy/' . $user->id, 'method' => 'DELETE']) }}
-                                {{ Form::submit('Delete', ['class' => 'btn btn-danger btn-xs left10','onclick'=>'return confirm(\'Delete user?\')?true:false;'])}}
+                            {{ Form::open(array('url' => 'admin/users/destroy/' . $user->id, 'method' => 'DELETE')) }}
+                                {{ Form::submit('Delete', array('class' => 'btn btn-danger btn-xs left10','onclick'=>'return confirm(\'Delete user?\')?true:false;'))}}
                             {{ Form::close() }}
                         </td>
                     </tr>

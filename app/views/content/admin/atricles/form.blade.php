@@ -12,9 +12,9 @@
 
 
     @if (Request::segment(3)=='create')
-        {{ Form::open(['role' => 'form', 'url' => 'admin/articles/store', 'files' => true]) }}
+        {{ Form::open(array('role' => 'form', 'url' => 'admin/articles/store', 'files' => true)) }}
     @else
-        {{ Form::model($article, ['role' => 'form', 'url' => 'admin/articles/update/' . $article->id, 'method' => 'PUT', 'files' => true]) }}
+        {{ Form::model($article, array('role' => 'form', 'url' => 'admin/articles/update/' . $article->id, 'method' => 'PUT', 'files' => true)) }}
     @endif
  
     <div style="overflow: hidden;">
@@ -38,7 +38,7 @@
                 {{ Form::checkbox('vkcheckbox', 1) }}
             @endif
 
-            {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
+            {{ Form::submit('Save', array('class' => 'btn btn-primary')) }}
         </div>
     </div>
 
@@ -46,13 +46,13 @@
         <div class="col-md-6">
             <div class="form-group">
                 {{ Form::label('title', 'Name') }}
-                {{ Form::text('title', null, ['placeholder' => 'Title', 'class' => 'form-control', 'id' =>'article-title-input']) }}
+                {{ Form::text('title', null, array('placeholder' => 'Title', 'class' => 'form-control', 'id' =>'article-title-input')) }}
             </div>
             <div class="form-group">
                 {{ Form::label('title', 'Alias') }}
                 <div class="row">
                     <div class="col-md-10">
-                        {{ Form::text('alias', null, ['placeholder' => 'Alias', 'class' => 'form-control', 'id' => 'article-alias-input']) }}
+                        {{ Form::text('alias', null, array('placeholder' => 'Alias', 'class' => 'form-control', 'id' => 'article-alias-input')) }}
                     </div>
                     <div class="col-md-2 generate-alias">
                         <a class="btn btn-default" onClick="generateSlug()">Generate</a>
@@ -63,7 +63,7 @@
         <div class="col-md-6">
             <div class='form-group'>
                 {{ Form::label('tags', 'Tags') }}
-                {{ Form::text('tags', isset($tags)?$tags:null, ['class' => 'form-control', 'id' => 'tags']) }}
+                {{ Form::text('tags', isset($tags)?$tags:null, array('class' => 'form-control', 'id' => 'tags')) }}
             </div>
         </div>
     </div>
@@ -74,33 +74,33 @@
         <div class="seocont">
             <div class='form-group col-md-6'>
                 {{ Form::label('keywords', 'Keywords') }}
-                {{ Form::textarea('keywords', null, ['class' => 'form-control hgt100']) }}
+                {{ Form::textarea('keywords', null, array('class' => 'form-control hgt100')) }}
             </div>
 
             <div class='form-group col-md-6'>
                 {{ Form::label('description', 'Description') }}
-                {{ Form::textarea('description', null, ['class' => 'form-control hgt100']) }}
+                {{ Form::textarea('description', null, array('class' => 'form-control hgt100')) }}
             </div>
 
             <div class='form-group col-md-6'>
                 {{ Form::label('img_alt', 'Image alt') }}
-                {{ Form::text('img_alt', null, ['class' => 'form-control']) }}
+                {{ Form::text('img_alt', null, array('class' => 'form-control')) }}
             </div>
 
             <div class='form-group col-md-6'>
                 {{ Form::label('img_title', 'Image title') }}
-                {{ Form::text('img_title', null, ['class' => 'form-control']) }}
+                {{ Form::text('img_title', null, array('class' => 'form-control')) }}
             </div>
 
-            {{ Form::hidden('seoid', null, ['class' => 'form-control']) }}
-            {{ Form::hidden('table', 'articles', ['class' => 'form-control']) }}
+            {{ Form::hidden('seoid', null, array('class' => 'form-control')) }}
+            {{ Form::hidden('table', 'articles', array('class' => 'form-control')) }}
         </div>
     </div>
     <!-- end seo -->
 
     <div class='form-group'>
         {{ Form::label('content', 'Text') }}
-        {{ Form::textarea('content', null, ['class' => 'form-control article-textarea']) }}
+        {{ Form::textarea('content', null, array('class' => 'form-control article-textarea')) }}
     </div>
 
     <div class="row">
@@ -113,14 +113,14 @@
                 <div class="panel-body">
                     <div class="upload_img_cont form-group">                                             
                         <img id="img_preview" src="{{ !empty($article->image)?'/'.$article->image:'/assets/images/no-image.jpg' }}" alt="your image" /><br><br>
-                        {{ Form::file('userfile', ['id' => 'imgInp']) }}
+                        {{ Form::file('userfile', array('id' => 'imgInp')) }}
                         <input type="hidden" name="image" id="image_path" value="{{ !empty($article->image)?$article->image:'' }}">
                     </div>
                 <div>
             </div>
             <div class='form-group'>
                 {{ Form::label('video', 'Video (youtube identifier)') }}
-                {{ Form::text('video', null, ['class' => 'form-control', 'id' => 'video']) }}
+                {{ Form::text('video', null, array('class' => 'form-control', 'id' => 'video')) }}
             </div>
         </div>
     </div>

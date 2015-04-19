@@ -15,15 +15,15 @@
 @section('main')
 
 @if (Request::segment(3)=='create')
-    {{ Form::open(['role' => 'form', 'url' => 'admin/menus/store']) }}
+    {{ Form::open(array('role' => 'form', 'url' => 'admin/menus/store')) }}
 @else
-    {{ Form::model($menu, ['role' => 'form', 'url' => 'admin/menus/update/' . $menu->id, 'method' => 'PUT']) }}
+    {{ Form::model($menu, array('role' => 'form', 'url' => 'admin/menus/update/' . $menu->id, 'method' => 'PUT')) }}
 @endif
 
 <div class='col-md-12'>
     <h1 class='fa fa-bars'> {{Request::segment(3)=='create'?'Add':'Edit'}} menu</h1>
     <div class="form-group pull-right top20">
-        {{ Form::submit('Save', ['class' => 'btn btn-primary pull-left right5']) }}
+        {{ Form::submit('Save', array('class' => 'btn btn-primary pull-left right5')) }}
     </div>
 </div>
 
@@ -37,7 +37,7 @@
 
     <div class='form-group'>
          <label>Menu name</label>
-        {{ Form::text('name', null, ['class' => 'form-control', 'required'=>'required']) }}
+        {{ Form::text('name', null, array('class' => 'form-control', 'required'=>'required')) }}
     </div>
     
     <div class="panel panel-default">
@@ -69,7 +69,7 @@
 <div class='col-md-8'>
     <label>Menu html <a class="toggle_menu_html">(show)</a></label>
     <div class='form-group menu_html_cont'>
-        {{ Form::textarea('content', null, ['class' => 'form-control menu_html']) }}
+        {{ Form::textarea('content', null, array('class' => 'form-control menu_html')) }}
     </div>
 
     <div class='form-group menu_file_tree'>

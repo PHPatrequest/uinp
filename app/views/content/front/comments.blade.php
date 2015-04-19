@@ -147,19 +147,19 @@
 		<div>
 			<div class="comment-user-form">
 				<div class='form-group'>					
-					{{ Form::label('username', 'Имя*', ['class' => 'pull-left']) }}
+					{{ Form::label('username', 'Имя*', array('class' => 'pull-left')) }}
 					<div>
 				    	{{ Form::text('username', null) }}
 				    </div>
 				</div>
 				<div class='form-group'>
-				    {{ Form::label('email', 'Email*', ['class' => 'pull-left']) }}
+				    {{ Form::label('email', 'Email*', array('class' => 'pull-left')) }}
 				    <div>
 				    	{{ Form::text('email', null) }}
 				    </div>
 				</div>
 				<div class='form-group'>
-				    {{ Form::label('password', 'Пароль*', ['class' => 'pull-left']) }}
+				    {{ Form::label('password', 'Пароль*', array('class' => 'pull-left')) }}
 				    <div>
 				    	{{ Form::password('password', null) }}
 					</div>
@@ -176,10 +176,10 @@
 	@endif	
 	<div class='form-group'>
 		{{ Form::label('content', 'Оставить комментарий (до 1000 символов)') }}
-	    {{ Form::textarea('content', null, ['class' => 'comment-textarea']) }}
+	    {{ Form::textarea('content', null, array('class' => 'comment-textarea')) }}
 	    {{ Form::hidden('item_id',  $item->id) }}
 	</div>
 	<div class='form-group'>
-	    {{ Form::button('Отправить', ['class' => 'comment-submit button', 'onClick' => 'addComment()']) }}
+	    {{ Form::button('Отправить', array('class' => 'comment-submit button', 'onClick' => 'addComment()')) }}
 	</div>
 </div>

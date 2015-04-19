@@ -74,4 +74,24 @@ class BaseController extends Controller {
 		}
 		return array();
 	}
+
+	/**
+	 * Create image thumb
+	 * @param  array  $image
+	 * @param  int  $width
+	 * @param  int  $height
+	 * @param  bool  $crop
+	 * @return string
+	*/
+	public function createThumb($image,$width,$height,$crop){
+		$thumbPath = 'uploads/thumbs/thumb_'.$image['name'];
+		Image::make($image['path'], 
+			array(
+				'width' 	=> $width,
+				'height' 	=> $height,
+				'crop'		=> $crop
+			))
+		->save($thumbPath);
+		return $thumbPath;
+	}
 }

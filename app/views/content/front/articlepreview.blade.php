@@ -11,7 +11,14 @@
 				<div class="date">
 					<div>Опубликовано: {{ $article->published_at }}</div>
 					<div>Комментариев: {{ isset($article->commentscount)?$article->commentscount:0 }}</div> 
-					<div>Автор: {{ $article->username }}</div>				
+					<div>
+						Автор:
+						@if(!empty($article->google_account)) 
+							<a href="{{ $article->google_account }}">{{ $article->username }}</a>
+						@else
+							{{ $article->username }}
+						@endif 
+					</div>				
 				</div>
 			</div>								
 		</div>

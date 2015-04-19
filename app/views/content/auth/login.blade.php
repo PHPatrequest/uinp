@@ -23,20 +23,20 @@
 
                 <h1><i class='fa fa-lock'></i> Вход</h1>
              
-                {{ Form::open(['role' => 'form']) }}
+                {{ Form::open(array('role' => 'form')) }}
              
                 <div class='form-group'>
                     {{ Form::label('username', 'Email') }}
-                    {{ Form::text('username', null, ['placeholder' => 'Email', 'class' => 'form-control']) }}
+                    {{ Form::text('username', null, array('placeholder' => 'Email', 'class' => 'form-control')) }}
                 </div>
              
                 <div class='form-group'>
                     {{ Form::label('password', 'Пароль') }}
-                    {{ Form::password('password', ['placeholder' => 'Password', 'class' => 'form-control']) }}
+                    {{ Form::password('password', array('placeholder' => 'Password', 'class' => 'form-control')) }}
                 </div>
              
                 <div class='form-group'>
-                    {{ Form::submit('Вход', ['class' => 'btn btn-primary']) }}
+                    {{ Form::submit('Вход', array('class' => 'btn btn-primary')) }}
                 </div>
              
                 {{ Form::close() }}

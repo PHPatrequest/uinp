@@ -36,7 +36,7 @@ class Article extends \Eloquent {
 
     	$articles =  DB::table('articles')
     					->join('users', 'users.id', '=', 'articles.user_id')
-    					->select('articles.*', 'users.username as user')
+    					->select('articles.*', 'users.username as user','users.google_account')
     					->where($search_field,'like','%'.$search.'%')
     					->orderBy($sort_by,$order)
     					->paginate(20)
@@ -51,7 +51,7 @@ class Article extends \Eloquent {
      * @return Obj  
      */ 
     public function getTagArticles($tags){
-        return DB::table('tags')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
+        return DB::table('tags')->select('articles.*','folders.path','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
                 ->where('tags.name',$tags)
                 ->join('tagstoelement','tagstoelement.tag_id','=','tags.id')
                 ->leftJoin('articles','articles.id','=','tagstoelement.element_id')
@@ -71,7 +71,7 @@ class Article extends \Eloquent {
      * @return Obj  
      */ 
     public function searchArticles($search){
-        return DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
+        return DB::table('articles')->select('articles.*','folders.path','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
                     ->where('articles.content', 'LIKE', '%'.$search.'%')
                     ->join('folders','folders.id','=','articles.parent_folder_id')
                     ->join('users','users.id','=','articles.user_id')
@@ -89,7 +89,7 @@ class Article extends \Eloquent {
      * @return Obj  
      */
     public function getLastarticles(){
-        return DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                
+        return DB::table('articles')->select('articles.*','folders.path','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                
                 ->join('folders','folders.id','=','articles.parent_folder_id')
                 ->join('users','users.id','=','articles.user_id')
                 ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
@@ -105,7 +105,7 @@ class Article extends \Eloquent {
      * @return Obj  
      */
     public function getArticlesByParentAlias($parentAlias,$limit=false){
-        $result =  DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                    
+        $result =  DB::table('articles')->select('articles.*','folders.path','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                    
                     ->join('folders','folders.id','=','articles.parent_folder_id')
                     ->join('users','users.id','=','articles.user_id')
                     ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
@@ -140,7 +140,7 @@ class Article extends \Eloquent {
      * @return Obj  
      */
     public function getArticleByDate($date){
-        return DB::table('articles')->select('articles.*','folders.path','users.username',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
+        return DB::table('articles')->select('articles.*','folders.path','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
                     ->where('articles.created_at', 'LIKE', '%'.$date.'%')
                     ->join('folders','folders.id','=','articles.parent_folder_id')
                     ->join('users','users.id','=','articles.user_id')

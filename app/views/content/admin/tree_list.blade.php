@@ -24,8 +24,8 @@
                             {{ link_to('admin/seo/item/'.strtolower($item->tname).'/'.$item->id, 'SEO', array('class' => 'btn btn-info btn-xs pull-left')) }}
                             {{ link_to('admin/'.strtolower($item->tname).'/edit/'.$item->id, 'Edit', array('class' => 'btn btn-info btn-xs pull-left left10')) }}
                             @if(!isset($item->undeletable) || $item->undeletable==0)
-                                {{ Form::open(['url' => 'admin/'.strtolower($item->tname).'/destroy/' . $item->id, 'method' => 'DELETE']) }}
-                                    {{ Form::submit('Delete', ['class' => 'btn btn-danger btn-xs left10','onclick'=>'return confirm(\'Delete?\')?true:false;'])}}
+                                {{ Form::open(array('url' => 'admin/'.strtolower($item->tname).'/destroy/' . $item->id, 'method' => 'DELETE')) }}
+                                    {{ Form::submit('Delete', array('class' => 'btn btn-danger btn-xs left10','onclick'=>'return confirm(\'Delete?\')?true:false;'))}}
                                 {{ Form::close() }}
                             @endif
                         </td>

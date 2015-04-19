@@ -12,7 +12,7 @@ class ArticleController extends \BaseController {
 			'Created'	=> 'created_at',
 			'Published'	=> 'published_at',
 		);
-	protected $dontFlash = ['file'];
+	protected $dontFlash = array('file');
 
 	/**
 	* Display a listing of articles
@@ -125,7 +125,7 @@ class ArticleController extends \BaseController {
 				}			
 				$model->image 		= $image['path'];
 				if(!empty($image['path'])){
-		    		$model->thumb 	= $this->createThumb($image);
+		    		$model->thumb 	= $this->createThumb($image,80,80,true);
 		    	}
 			}
         	$model->save();
@@ -244,7 +244,7 @@ class ArticleController extends \BaseController {
 					return Redirect::back()->withErrors($image['errors'])->withInput(Input::except('userfile'));
 				}
 		        $data['image'] = $image['path'];
-		        $data['thumb'] = $this->createThumb($image);
+		        $data['thumb'] = $this->createThumb($image,80,80,true);
 		        $image = $image['path'];
 			} else {
 				$image = Input::get('image');
@@ -311,23 +311,6 @@ class ArticleController extends \BaseController {
 	}
 
 	/**
-	 * Create image thumb
-	 * @param  array  $image
-	 * @return string
-	*/
-	private function createThumb($image){
-		$thumbPath = 'uploads/thumbs/thumb_'.$image['name'];
-		Image::make($image['path'], 
-			array(
-				'width' 	=> 80,
-				'height' 	=> 80,
-				'crop'		=> true
-			))
-		->save($thumbPath);
-		return $thumbPath;
-	}
-
-	/**
 	 * Post Article to VK
 	 * @param  string  $text
 	 * @param  string  $image
@@ -337,7 +320,7 @@ class ArticleController extends \BaseController {
 	public function vkwallpost($text, $image='', $tags='',$postId=false){
 		//если задан postId - обновит существующую запись		
 		$accessToken = Config::get('site_keys.vk.accessToken');
-		$model = new Vkontakte(['access_token' => $accessToken]);
+		$model = new Vkontakte(array('access_token' => $accessToken));
 		$publicID = Config::get('site_keys.vk.publicID');
 		$text = strip_tags($text);
 		$postId = $model->postToPublic($publicID, $text, $image, $tags, $postId);
