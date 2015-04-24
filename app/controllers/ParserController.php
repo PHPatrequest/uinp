@@ -77,6 +77,7 @@ class ParserController extends BaseController {
 	        $model->vk   			= Input::get('vk')?1:0;
 	        $model->folder_id 		= Input::get('folder_id');
 	        $model->min_chars 		= Input::get('min_chars');
+	        $model->parse_rules 	= Input::get('parse_rules');
         	$model->save();
 		}
 
@@ -131,6 +132,7 @@ class ParserController extends BaseController {
 	        	'vk'   				=> Input::get('vk'),
 	        	'folder_id' 		=> Input::get('folder_id'),
 	        	'min_chars'			=> Input::get('min_chars'),
+	        	'parse_rules'		=> Input::get('parse_rules'),
 	        );	        
 
         	$model->update($data);
@@ -209,25 +211,45 @@ class ParserController extends BaseController {
 	}
 
 	private function storeParsed($rss,$parserRow){
+		
 		$saveData = array();
 		$i = 0;
 	    foreach($rss->channel->item as $entry) {
 	    	$article = array();
 
 	    	if($parserRow->translate == 1){
-	    		$article['title'] = $this->yandexTranslate((string)$entry->title);  		    	
+	    		$article['title'] = (string)$this->yandexTranslate((string)$entry->title);
+	    		if(empty($article['content'])){
+	    			$article['title'] = (string)$entry->title; 
+	    		}
 		    } else {
-		    	$article['title'] = (string)$entry->title;    	 			    	
+		    	$article['title'] = (string)$entry->title;   	 			    	
 		    }
 		    $article['alias'] = $this->generateAlias($article['title']);
+
 		    if(!$this->aliasUnique($article['alias'])){
 		    	continue;
 		    }
+		    if(!empty($parserRow->parse_rules)){
+		    	include_once(app_path().'/helpers/simple_html_dom.php');
+	    		$html = file_get_html($entry->link);
+	    		$rawArticle = $html->find($parserRow->parse_rules);
+	    		$description = implode(' ',$rawArticle);
+	    		if(empty($description)){
+	    			continue;
+	    		}
+		    } else {
+		    	$description = $entry->description;
+		    }
 			if($parserRow->translate == 1){
-				$article['content'] = $this->yandexTranslate((string)$entry->description);
+				$article['content'] = (string)$this->yandexTranslate((string)$description);
+				if(empty($article['content'])){
+					$article['content'] = (string)$description;
+				}
 			} else {
-				$article['content'] = (string)$entry->description; 
+				$article['content'] = (string)$description; 
 			}
+
 			if($parserRow->min_chars>0 && strlen($article['content'])<$parserRow->min_chars){
 				continue;
 			}
@@ -256,7 +278,7 @@ class ParserController extends BaseController {
 			}		    
 		    $articleController = new ArticleController;
 		    $articleController->postStore($article);
-    		$i++;     		   
+    		$i++;    		   
 	    }
 	    return $i;
 	}
@@ -297,15 +319,15 @@ class ParserController extends BaseController {
 			$key = Config::get('site_keys.yandexTranslate');
 			$translator = new Translator($key);
 			$translation = $translator->translate($text, 'ru');
-
-			return $translation; // Привет мир
+			return $translation;
 
 			//echo $translation->getSource(); // Hello world;
 			//echo $translation->getSourceLanguage(); // en
 			//echo $translation->getResultLanguage(); // ru
 
 		} catch (Exception $e) {
-		  	//echo $e->getMessage();
+		  	//echo $e->getMessage(); exit;
+			return $text;
 		}
 	}
 }

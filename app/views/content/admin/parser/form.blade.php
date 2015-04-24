@@ -64,7 +64,11 @@
                 {{ Form::label('only_with_images', 'Only with images') }}
             </div>
         </div>
-        <div class="form-group col-md-12">        
+        <div class="form-group col-md-12" style="margin:0 15px 20px 15px">        
+            {{ Form::label('parse_rules', 'Article parse rules') }}
+            {{ Form::text('parse_rules', null, array('placeholder' => 'Leave empty if dont need', 'class' => 'form-control')) }}
+        </div> 
+        <div class="form-group col-md-12" style="margin:0 15px">        
             {{ $tree }}
         </div> 
     </div>
