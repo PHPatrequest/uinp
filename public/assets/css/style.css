@@ -398,12 +398,23 @@ h4{
 	color:white;
 	text-decoration: none;
 }
+.left{
+	float:left;
+}
 
 @media (max-width: 992px){
 	.comment .content textarea{
 		min-height:150px; 
 	}
-
+	.header-text{
+		display: none;
+	}
+	.phone{
+		display: none;
+	}
+	.top-menu{
+		float: none;
+	}
 	.footer{
 		display: none;
 	}

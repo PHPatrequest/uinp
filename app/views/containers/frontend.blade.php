@@ -24,7 +24,7 @@
 	<div class="container">
 		<div class="top row">
 			<div class="col-md-9">
-				<div class="nav">
+				<div class="nav left top-menu">
 					<div class="menu-header">
 						<div class="pull-left">МЕНЮ</div>
 						<div class="pull-right fa fa-bars show-menu"></div>
@@ -32,7 +32,8 @@
 					@if(isset($menu->top))
 						{{ $menu->top }}
 					@endif
-				</div>	
+				</div>
+				<div class="pull-left phone" style="margin: 4px 0 0 15px; text-decoration:none;">телефон редакции: <a href="tel:380443922975" style="text-decoration:none;">+38 (044) 392-29-75</a></div>	
 			</div>
 			<div class="col-md-3">	
 				<div class="search">
@@ -47,7 +48,7 @@
 			<div class="logo">		
 				<a href="/" title="" rel="home" style="color:#326693">
 					<div class="pull-left"><img src="/assets/images/uinplogo.png" style="width: 160px; margin: 20px 0 0 10px;"></div>
-					<div class="pull-left" style="font-family:impact; font-size:30px; padding:5px 0 0 20px">
+					<div class="pull-left header-text" style="font-family:impact; font-size:30px; padding:5px 0 0 20px">
 						<div>украинский независимый новостной портал</div>
 						<div style="color: rgb(200, 200, 200);">ukrainian independent news portal</div>
 					</div>
