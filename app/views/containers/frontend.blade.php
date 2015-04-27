@@ -26,7 +26,7 @@
 			<div class="col-md-9">
 				<div class="nav left top-menu">
 					<div class="menu-header">
-						<div class="pull-left">МЕНЮ</div>
+						<div class="pull-left" style="color: #326693;font-family: impact;position: absolute;font-size: 24px;top: 0px;">UINP</div>
 						<div class="pull-right fa fa-bars show-menu"></div>
 					</div> 
 					@if(isset($menu->top))

@@ -406,8 +406,11 @@ h4{
 	.comment .content textarea{
 		min-height:150px; 
 	}
-	.header-text{
+	.logo{
 		display: none;
+	}
+	.top{
+		border-bottom: none;
 	}
 	.phone{
 		display: none;
