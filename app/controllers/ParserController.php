@@ -154,16 +154,20 @@ class ParserController extends BaseController {
 		return Redirect::back();
 	}
 
-	public function getParse(){
+	public function getParse($parserId=''){
 		// $model = new Settings;
 		// $settings = $model->first();
 		// if($settings->parser_busy == 0){
 		//	$model->update(array('parser_busy'=>1));
 			header('Content-Type: text/html; charset=utf-8');
-			$parserData = Parser::all();
+			if(empty($parserId)){
+				$parserData = Parser::all();
+			} else {
+				$parserData = array(Parser::find($parserId));
+			}
 			if(!empty($parserData)){
 				foreach ($parserData as $parserRow) {
-					if($parserRow->disabled==0){
+					if($parserRow->disabled==0 || !empty($parserId)){
 						$curl = curl_init();
 						curl_setopt_array($curl, Array(
 						    CURLOPT_URL            => $parserRow->url,
@@ -182,7 +186,7 @@ class ParserController extends BaseController {
 						    continue;
 						}					
 						
-						$itemsCount = $this->storeParsed($rss,$parserRow);
+						$itemsCount = $this->storeParsed($rss,$parserRow,$parserId);
 						$messages[] = 'From '.$parserRow->url.' stored '.$itemsCount.' items';
 					}
 				}
@@ -210,11 +214,51 @@ class ParserController extends BaseController {
 		return false;
 	}
 
-	private function storeParsed($rss,$parserRow){
-		
+	private function removeTags($html){
+		$res = preg_replace('/\<a.*\>(.*)\<\/a>/', '$1', $html);
+		$res = preg_replace('/\<.*\>.*\<\/.*\>/', '', $html);
+		$res = preg_replace('/\<.*\>/', '', $res);
+		return $res;
+	}
+
+	private function url_get_contents($url) {
+		if (!function_exists('curl_init')){
+		    die('CURL is not installed!');
+		}
+		$headers[]  = "User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13";
+	    $headers[]  = "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+	    $headers[]  = "Accept-Language:en-us,en;q=0.5";
+	    $headers[]  = "Accept-Encoding:gzip,deflate";
+	    $headers[]  = "Accept-Charset:ISO-8859-1,utf-8;q=0.7,*;q=0.7";
+	    $headers[]  = "Keep-Alive:115";
+	    $headers[]  = "Connection:keep-alive";
+	    $headers[]  = "Cache-Control:max-age=0";
+
+	    $curl = curl_init();
+	    curl_setopt($curl, CURLOPT_URL, $url);
+	    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+	    curl_setopt($curl, CURLOPT_ENCODING, "gzip");
+	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+	    $data = curl_exec($curl);
+	    curl_close($curl);
+	    return $data;
+	}
+
+	private function storeParsed($rss,$parserRow,$parserId){	
 		$saveData = array();
 		$i = 0;
 	    foreach($rss->channel->item as $entry) {
+
+			if(!empty($parserId)){
+		    	/****Test******/
+		    	echo "<br>Парсим запись из RSS";
+		    	echo '<pre>';
+		    	var_dump($entry);
+		    	echo '</pre><br>';
+		    	/**************/
+		    }
+
 	    	$article = array();
 
 	    	if($parserRow->translate == 1){
@@ -230,11 +274,25 @@ class ParserController extends BaseController {
 		    if(!$this->aliasUnique($article['alias'])){
 		    	continue;
 		    }
-		    if(!empty($parserRow->parse_rules)){
+		    if(!empty($parserRow->parse_rules)){	    	
 		    	include_once(app_path().'/helpers/simple_html_dom.php');
-	    		$html = file_get_html($entry->link);
-	    		$rawArticle = $html->find($parserRow->parse_rules);
+		    	$html = new simple_html_dom();
+		    	$html->load($this->url_get_contents($entry->link),0);    
+	    		$rawArticle = $html->find($parserRow->parse_rules);   		
 	    		$description = implode(' ',$rawArticle);
+	    		//$description = $this->removeTags($rawArticle);
+	    		$description = strip_tags($description);
+
+				if(!empty($parserId)){
+			    	/****Test******/
+			    	echo "Вытаскиваем статью по URL";
+			    	echo '<pre>';
+			    	var_dump($description);
+			    	echo '</pre>************************';  	
+			    	/**************/
+			    	@ob_flush(); flush();
+			    }
+
 	    		if(empty($description)){
 	    			continue;
 	    		}
@@ -250,9 +308,15 @@ class ParserController extends BaseController {
 				$article['content'] = (string)$description; 
 			}
 
-			if($parserRow->min_chars>0 && strlen($article['content'])<$parserRow->min_chars){
+			if($parserRow->min_chars > 0 && strlen($article['content']) < $parserRow->min_chars){
+				/****Test******/
+				if(!empty($parserId)){
+					echo '<br><span style="color:red">Недостаточно символов</span><br>';
+				}
+				/*************/
 				continue;
 			}
+
 		    $article['user_id'] 	= $parserRow->author;
 		    $article['created_at']	= date('Y-m-d H:i:s');
 		    $article['updated_at']	= date('Y-m-d H:i:s');
@@ -272,12 +336,26 @@ class ParserController extends BaseController {
 			    );
 			} else {
 				if($parserRow->only_with_images == 1){
+					/****Test******/
+					if(!empty($parserId)){
+						echo '<br><span style="color:red">Нет картинки</span><br>';
+					}
+					/*************/
 					continue;
 				}
 				$article['image'] = '';
-			}		    
-		    $articleController = new ArticleController;
-		    $articleController->postStore($article);
+			}
+
+			/****Test******/
+			if(!empty($parserId)){
+				echo '<br><span style="color:green">Будет сохранена</span><br>';
+			}
+			/*************/
+
+			if(empty($parserId)){
+		    	$articleController = new ArticleController;
+		    	$articleController->postStore($article);
+			}
     		$i++;    		   
 	    }
 	    return $i;

@@ -33,7 +33,8 @@
                         <td>{{ $item->translate?'<span class="fa fa-check">':'<span class="fa fa-times">' }}</td>
                         <td>{{ $item->disabled?'<span class="fa fa-check">':'<span class="fa fa-times">' }}</td>
                         <td>{{ $item->username }}</td>
-                        <td>                        
+                        <td> 
+                            {{ link_to('admin/parser/parse/'.$item->id, 'Test', array('class' => 'btn btn-success btn-xs pull-left left10', 'title'=>'edit')) }}                       
                             {{ link_to('admin/parser/edit/'.$item->id, 'Edit', array('class' => 'btn btn-info btn-xs pull-left left10', 'title'=>'edit')) }}
                             {{ Form::open(array('url' => 'admin/parser/destroy/' . $item->id, 'method' => 'DELETE')) }}
                                 {{ Form::submit('Delete', array('class' => 'btn btn-danger btn-xs left10','onclick'=>'return confirm(\'Delete item?\')?true:false;'))}}
