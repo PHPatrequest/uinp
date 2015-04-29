@@ -257,7 +257,7 @@ class ParserController extends BaseController {
 		    	echo "<br>Парсим запись из RSS";
 		    	echo '<pre>';
 		    	var_dump($entry);
-		    	echo '</pre><br>';
+		    	echo '</pre>-----------------------<br>';
 		    	/**************/
 		    }
 
@@ -274,7 +274,11 @@ class ParserController extends BaseController {
 		    $article['alias'] = $this->generateAlias($article['title']);
 
 		    if(!$this->aliasUnique($article['alias'])){
-
+				/****Test******/
+				if(!empty($parserId)){
+					echo '<br><span style="color:red">Уже сохранена</span><br>';
+				}
+				/*************/
 		    	continue;
 		    }
 		    if(!empty($parserRow->parse_rules)){	    	
@@ -299,7 +303,7 @@ class ParserController extends BaseController {
 	    		if(empty($description)){
 	    			/****Test******/
 					if(!empty($parserId)){
-						echo '<br><span style="color:red">Уже сохранена</span><br>';
+						echo '<br><span style="color:red">Пустой контент</span><br>';
 					}
 					/*************/
 	    			continue;
