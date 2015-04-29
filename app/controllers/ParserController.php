@@ -276,7 +276,7 @@ class ParserController extends BaseController {
 		    if(!$this->aliasUnique($article['alias'])){
 				/****Test******/
 				if(!empty($parserId)){
-					echo '<br><span style="color:red">Уже сохранена</span><br>';
+					echo '<span style="color:red">Уже сохранена</span><br>';
 				}
 				/*************/
 		    	continue;
@@ -295,7 +295,7 @@ class ParserController extends BaseController {
 			    	echo "Вытаскиваем статью по URL";
 			    	echo '<pre>';
 			    	var_dump($description);
-			    	echo '</pre>************************';  	
+			    	echo '</pre>************************<br>';  	
 			    	/**************/
 			    	@ob_flush(); flush();
 			    }
@@ -303,7 +303,7 @@ class ParserController extends BaseController {
 	    		if(empty($description)){
 	    			/****Test******/
 					if(!empty($parserId)){
-						echo '<br><span style="color:red">Пустой контент</span><br>';
+						echo '<span style="color:red">Пустой контент</span><br>';
 					}
 					/*************/
 	    			continue;
@@ -323,7 +323,7 @@ class ParserController extends BaseController {
 			if($parserRow->min_chars > 0 && strlen($article['content']) < $parserRow->min_chars){
 				/****Test******/
 				if(!empty($parserId)){
-					echo '<br><span style="color:red">Недостаточно символов</span><br>';
+					echo '<span style="color:red">Недостаточно символов</span><br>';
 				}
 				/*************/
 				continue;
@@ -350,7 +350,7 @@ class ParserController extends BaseController {
 				if($parserRow->only_with_images == 1){
 					/****Test******/
 					if(!empty($parserId)){
-						echo '<br><span style="color:red">Нет картинки</span><br>';
+						echo '<span style="color:red">Нет картинки</span><br>';
 					}
 					/*************/
 					continue;
@@ -360,7 +360,7 @@ class ParserController extends BaseController {
 
 			/****Test******/
 			if(!empty($parserId)){
-				echo '<br><span style="color:green">Будет сохранена</span><br>';
+				echo '<span style="color:green">Будет сохранена</span><br>';
 			}
 			/*************/
 
