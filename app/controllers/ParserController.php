@@ -201,7 +201,9 @@ class ParserController extends BaseController {
 		// } else {
 		// 	Session::flash('error', 'Parser busy');	
 		// }
-		return Redirect::to('/admin/parser');
+		if(empty($parserId)){	
+			return Redirect::to('/admin/parser');
+		}
 	}
 
 	private function validateXml($ulr){
