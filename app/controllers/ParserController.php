@@ -274,6 +274,7 @@ class ParserController extends BaseController {
 		    $article['alias'] = $this->generateAlias($article['title']);
 
 		    if(!$this->aliasUnique($article['alias'])){
+
 		    	continue;
 		    }
 		    if(!empty($parserRow->parse_rules)){	    	
@@ -296,6 +297,11 @@ class ParserController extends BaseController {
 			    }
 
 	    		if(empty($description)){
+	    			/****Test******/
+					if(!empty($parserId)){
+						echo '<br><span style="color:red">Уже сохранена</span><br>';
+					}
+					/*************/
 	    			continue;
 	    		}
 		    } else {
@@ -309,7 +315,7 @@ class ParserController extends BaseController {
 			} else {
 				$article['content'] = (string)$description; 
 			}
-
+			@ob_flush(); flush();
 			if($parserRow->min_chars > 0 && strlen($article['content']) < $parserRow->min_chars){
 				/****Test******/
 				if(!empty($parserId)){
