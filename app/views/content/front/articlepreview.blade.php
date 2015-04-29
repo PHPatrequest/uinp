@@ -10,8 +10,8 @@
 			<div style="overflow:hidden">
 				<h2 property="name"><a href="/{{ $article->path }}/{{ $article->alias }}">{{ $article->title }}</a></h2>			
 				<div class="date">
-					<div property="datePublished">Опубликовано: {{ $article->published_at }}</div>
-					<div property="commentCount">Комментариев: {{ isset($article->commentscount)?$article->commentscount:0 }}</div> 
+					<div>Опубликовано: <span property="datePublished">{{ $article->published_at }}</span></div>
+					<div>Комментариев: <span property="commentCount">{{ isset($article->commentscount)?$article->commentscount:0 }}</span></div> 
 					<div>
 						Автор:
 						@if(!empty($article->google_account)) 
