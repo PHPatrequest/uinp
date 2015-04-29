@@ -1,6 +1,7 @@
 <div class="preview article_preview">
 	<div class="row" vocab="http://schema.org/" typeof="Article">
 		<div class="col-md-12" style="overflow: hidden;">
+			<div style="display:none">{{ $article->id }}</div>
 			@if(!empty($article->thumb))
 				<img src="/{{ $article->thumb }}" class="img-thumbnail pull-left" property="image">
 			@elseif(!empty($article->video))
