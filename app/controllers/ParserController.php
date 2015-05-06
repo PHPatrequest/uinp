@@ -284,41 +284,58 @@ class ParserController extends BaseController {
 		    if(!empty($parserRow->parse_rules)){	    	
 		    	include_once(app_path().'/helpers/simple_html_dom.php');
 		    	$html = new simple_html_dom();
-		    	$html->load($this->url_get_contents($entry->link),0);    
+		    	$html->load($this->url_get_contents($entry->link),0);
+		    	$metaKeywords = $html->find('meta[name=news_keywords]');
+		    	$metaDescription = $html->find('meta[name=description]'); 
 	    		$rawArticle = $html->find($parserRow->parse_rules);   		
-	    		$description = implode(' ',$rawArticle);
+	    		$articleText = implode(' ',$rawArticle);
 	    		//$description = $this->removeTags($rawArticle);
-	    		$description = strip_tags($description);
-
+	    		$articleText = strip_tags($articleText);
+		    } else {
+		    	$articleText = $entry->description;
+		    }
+	    	if(empty($articleText)){
+    			/****Test******/
 				if(!empty($parserId)){
+					echo '<span style="color:red">Пустой контент</span><br>';
+				}
+				/*************/
+    			continue;
+    		}
+
+		    $article['keywords'] = '';
+		    $article['description'] = '';
+			if($parserRow->translate == 1){
+				if(isset($metaKeywords[0]->content)){
+					$article['keywords'] = $this->yandexTranslate((string)$metaKeywords[0]->content);
+				}
+				if(isset($metaDescription[0]->content)){
+					$article['description'] = $this->yandexTranslate((string)$metaDescription[0]->content);
+				}
+				$article['content'] = (string)$this->yandexTranslate((string)$articleText);
+				if(empty($article['content'])){
+					$article['content'] = (string)$articleText;
+				}
+			} else {
+				if(isset($metaKeywords[0]->content)){
+					$article['keywords'] = $metaKeywords[0]->content;
+				}
+				if(isset($metaDescription[0]->content)){
+					$article['description'] = $metaDescription[0]->content;
+				}
+				$article['content'] = (string)$articleText;
+			}
+			if(!empty($parserId)){
 			    	/****Test******/
+			    	echo 'Keywords: '.$article['keywords'].'<br>----------------------<br>';
+			    	echo 'Description: '.$article['description'].'<br>----------------------<br>';
 			    	echo "Вытаскиваем статью по URL";
 			    	echo '<pre>';
-			    	var_dump($description);
+			    	var_dump($article['content']);
 			    	echo '</pre>************************<br>';  	
 			    	/**************/
 			    	@ob_flush(); flush();
 			    }
-
-	    		if(empty($description)){
-	    			/****Test******/
-					if(!empty($parserId)){
-						echo '<span style="color:red">Пустой контент</span><br>';
-					}
-					/*************/
-	    			continue;
-	    		}
-		    } else {
-		    	$description = $entry->description;
-		    }
-			if($parserRow->translate == 1){
-				$article['content'] = (string)$this->yandexTranslate((string)$description);
-				if(empty($article['content'])){
-					$article['content'] = (string)$description;
-				}
-			} else {
-				$article['content'] = (string)$description; 
-			}
 			@ob_flush(); flush();
 			if($parserRow->min_chars > 0 && strlen($article['content']) < $parserRow->min_chars){
 				/****Test******/
