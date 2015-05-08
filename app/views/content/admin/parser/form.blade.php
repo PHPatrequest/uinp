@@ -67,6 +67,18 @@
         <div class="form-group col-md-12" style="margin:0 15px 20px 15px">        
             {{ Form::label('parse_rules', 'Article parse rules') }}
             {{ Form::text('parse_rules', null, array('placeholder' => 'Leave empty if dont need', 'class' => 'form-control')) }}
+        </div>
+        <div class="form-group col-md-12" style="margin:0 15px 20px 15px">        
+            {{ Form::label('meta_keywords', 'Keywords meta name') }}
+            {{ Form::text('meta_keywords', null, array('placeholder' => 'Leave empty if dont need', 'class' => 'form-control')) }}
+        </div> 
+        <div class="form-group col-md-12" style="margin:0 15px 20px 15px">        
+            {{ Form::label('meta_description', 'Description meta name') }}
+            {{ Form::text('meta_description', null, array('placeholder' => 'Leave empty if dont need', 'class' => 'form-control')) }}
+        </div> 
+        <div class="form-group col-md-12" style="margin:0 15px 20px 15px">        
+            {{ Form::label('remove_rule', 'Remove rule (regular expression)') }}
+            {{ Form::text('remove_rule', null, array('placeholder' => 'Leave empty if dont need', 'class' => 'form-control')) }}
         </div> 
         <div class="form-group col-md-12" style="margin:0 15px">        
             {{ $tree }}

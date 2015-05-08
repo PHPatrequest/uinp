@@ -78,6 +78,9 @@ class ParserController extends BaseController {
 	        $model->folder_id 		= Input::get('folder_id');
 	        $model->min_chars 		= Input::get('min_chars');
 	        $model->parse_rules 	= Input::get('parse_rules');
+	        $model->meta_keywords 	= Input::get('meta_keywords');
+	        $model->meta_description= Input::get('meta_description');
+	        $model->remove_rule		= Input::get('remove_rule');
         	$model->save();
 		}
 
@@ -133,6 +136,9 @@ class ParserController extends BaseController {
 	        	'folder_id' 		=> Input::get('folder_id'),
 	        	'min_chars'			=> Input::get('min_chars'),
 	        	'parse_rules'		=> Input::get('parse_rules'),
+	        	'meta_keywords'		=> Input::get('meta_keywords'),
+	        	'meta_description'	=> Input::get('meta_description'),
+	        	'remove_rule'		=> Input::get('remove_rule'),
 	        );	        
 
         	$model->update($data);
@@ -217,9 +223,10 @@ class ParserController extends BaseController {
 	}
 
 	private function removeTags($html){
-		$res = preg_replace('/\<a.*\>(.*)\<\/a>/', '$1', $html);
-		$res = preg_replace('/\<.*\>.*\<\/.*\>/', '', $html);
-		$res = preg_replace('/\<.*\>/', '', $res);
+		$res = preg_replace('/\<img.*\>/', '', $html);
+		$res = preg_replace('/\<a.*\>(.*)\<\/a>/', '$1', $res);
+		//$res = preg_replace('/\<.*\>.*\<\/.*\>/', '', $html);
+		//$res = preg_replace('/\<.*\>/', '', $res);
 		return $res;
 	}
 
@@ -285,15 +292,20 @@ class ParserController extends BaseController {
 		    	include_once(app_path().'/helpers/simple_html_dom.php');
 		    	$html = new simple_html_dom();
 		    	$html->load($this->url_get_contents($entry->link),0);
-		    	$metaKeywords = $html->find('meta[name=news_keywords]');
-		    	$metaDescription = $html->find('meta[name=description]'); 
+		    	if(!empty($parserRow->meta_keywords)){
+		    		$metaKeywords = $html->find('meta[name='.$parserRow->meta_keywords.']');
+		    	}
+		    	if(!empty($parserRow->meta_description)){
+		    		$metaDescription = $html->find('meta[name='.$parserRow->meta_description.']'); 
+		    	}
 	    		$rawArticle = $html->find($parserRow->parse_rules);   		
 	    		$articleText = implode(' ',$rawArticle);
-	    		//$description = $this->removeTags($rawArticle);
+	    		//$articleText = $this->removeTags($articleText);
 	    		$articleText = strip_tags($articleText);
 		    } else {
 		    	$articleText = $entry->description;
 		    }
+
 	    	if(empty($articleText)){
     			/****Test******/
 				if(!empty($parserId)){
@@ -307,10 +319,10 @@ class ParserController extends BaseController {
 		    $article['description'] = '';
 			if($parserRow->translate == 1){
 				if(isset($metaKeywords[0]->content)){
-					$article['keywords'] = $this->yandexTranslate((string)$metaKeywords[0]->content);
+					$article['keywords'] = (string)$this->yandexTranslate((string)$metaKeywords[0]->content);
 				}
 				if(isset($metaDescription[0]->content)){
-					$article['description'] = $this->yandexTranslate((string)$metaDescription[0]->content);
+					$article['description'] = (string)$this->yandexTranslate((string)$metaDescription[0]->content);
 				}
 				$article['content'] = (string)$this->yandexTranslate((string)$articleText);
 				if(empty($article['content'])){

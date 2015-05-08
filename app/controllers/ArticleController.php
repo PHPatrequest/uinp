@@ -77,7 +77,7 @@ class ArticleController extends \BaseController {
 			}	
 			$validator = Validator::make(Input::all(), $this->rules);
 		} else {
-			$tags 				= '';
+			$tags 				= $data['keywords'];
 			$video				= '';
 			$parentFolderId 	= $data['parent_folder_id'];
 			$title 				= $data['title'];
@@ -130,12 +130,11 @@ class ArticleController extends \BaseController {
 			}
         	$model->save();
   
-        	if(empty($data)){
-	        	$TagController = new TagController;
-	        	$TagController->addTags($tags,'articles',$model->id);
+        	$TagController = new TagController;
+        	$TagController->addTags($tags,'articles',$model->id);
 
-	        	$this->saveSeo($model->id);	
-	        }  
+        	$this->saveSeo($model->id, $data);	
+  
 	        $this->postSocNetworks($model,$tags,$socialParams);
         	$this->saveAlias($alias,$model->id,'articles',$parentFolderId);  	
 		}
@@ -276,23 +275,32 @@ class ArticleController extends \BaseController {
 	 *
 	 * @return Bool
 	 */
-	private function saveSeo($itemId=''){
-			$keywords = Input::get('keywords');
-			$description = Input::get('description');
-			$img_alt = Input::get('img_alt');
-			$img_title = Input::get('img_title');
-
-			if(!empty($keywords) || !empty($description) || !empty($img_alt) || !empty($img_title)){
-				$seo = new SeoController;
-		    	$seoid = Input::get('seoid');
-        		if(!empty($seoid)){
-        			$seo->putUpdate($seoid);
-        		} else if(!empty($itemId)) {
-        			$seo->postStore($itemId);        			
-        		}
-        		return true;
-        	}
-        	return false;
+	private function saveSeo($itemId='',$data){
+		$model = new Seo;
+		$model->table = 'articles';
+		$model->item_id = $itemId;
+		if(empty($data)){
+			$model->keywords = Input::get('keywords');
+			$model->description = Input::get('description');
+			$model->img_alt = Input::get('img_alt');
+			$model->img_title = Input::get('img_title');
+		} else {
+			$model->keywords = $data['keywords'];
+			$model->description = $data['description'];
+			$model->img_alt = '';
+			$model->img_title = '';
+		}
+		if(!empty($model->keywords) || !empty($model->description) || !empty($model->img_alt) || !empty($model->img_title)){			
+	    	$seoid = Input::get('seoid');
+    		if(!empty($seoid)){
+    			$seoController = new SeoController;
+    			$seoController->putUpdate($seoid);
+    		} else if(!empty($itemId)) {
+    			$model->save();        			
+    		}
+    		return true;
+    	}
+    	return false;
 	}
 
 	/**
