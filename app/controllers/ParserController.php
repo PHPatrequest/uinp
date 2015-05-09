@@ -161,10 +161,6 @@ class ParserController extends BaseController {
 	}
 
 	public function getParse($parserId=''){
-		// $model = new Settings;
-		// $settings = $model->first();
-		// if($settings->parser_busy == 0){
-		//	$model->update(array('parser_busy'=>1));
 			header('Content-Type: text/html; charset=utf-8');
 			if(empty($parserId)){
 				$parserData = Parser::all();
@@ -185,7 +181,6 @@ class ParserController extends BaseController {
 
 						libxml_use_internal_errors(true);
 						$rss = simplexml_load_string($data);
-						//$rss = simplexml_load_file($parserRow->url);
 						if ($rss === false) {
 							$error = libxml_get_errors();
 						    $errors[] = 'Error in '.$parserRow->url.' - '.$error[0]->message;
@@ -203,10 +198,6 @@ class ParserController extends BaseController {
 			if(isset($messages)){
 				Session::flash('success', implode('<br>',$messages));
 			}
-		//	$model->update(array('parser_busy'=>0));		
-		// } else {
-		// 	Session::flash('error', 'Parser busy');	
-		// }
 		if(empty($parserId)){	
 			return Redirect::to('/admin/parser');
 		}
@@ -295,9 +286,7 @@ class ParserController extends BaseController {
 		    	if(!empty($parserRow->meta_keywords)){
 		    		$metaKeywords = $html->find('meta[name='.$parserRow->meta_keywords.']');
 		    	}
-		    	if(!empty($parserRow->meta_description)){
-		    		$metaDescription = $html->find('meta[name='.$parserRow->meta_description.']'); 
-		    	}
+		    	$metaDescription = $entry->description; 
 	    		$rawArticle = $html->find($parserRow->parse_rules);   		
 	    		$articleText = implode(' ',$rawArticle);
 	    		//$articleText = $this->removeTags($articleText);

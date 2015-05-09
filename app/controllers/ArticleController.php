@@ -69,7 +69,6 @@ class ArticleController extends \BaseController {
 			$video 				= Input::get('video');
 			$removeLinks 		= Input::get('removelinks');
 
-			$socialParams['bufferapp'] 	= Input::get('bufferapp');
 			$socialParams['vk'] 		= Input::get('vkcheckbox');
 
 			if(Input::hasFile('userfile')) {
@@ -88,7 +87,6 @@ class ArticleController extends \BaseController {
 			$removeLinks 		= $data['removelinks'];
 			$image 				= $data['image'];
 
-			$socialParams['bufferapp'] 	= $data['bufferapp'];
 			$socialParams['vk'] 		= $data['vk'];
 
 			$validator = Validator::make($data, $this->rules);
@@ -160,9 +158,6 @@ class ArticleController extends \BaseController {
 			$link = URL::to('/').'/'.$parentPath.'/'.$model->alias;		
 		}
 		
-		if($params['bufferapp']==1){
-			$this->bufferapp($text, $model->image, $model->thumb, $link);			
-		}
 		if($params['vk']==1){
 			if(!empty($link)){
 				$text = $link." \n".$text;
@@ -333,53 +328,5 @@ class ArticleController extends \BaseController {
 		$text = strip_tags($text);
 		$postId = $model->postToPublic($publicID, $text, $image, $tags, $postId);
 		return $postId;
-	}
-
-	/**
-	 * Post Article via bufferapp
-	 * @param  string  $text
-	 * @param  string  $image
-	 * @param  string  $thumb
-	 * @return none
-	*/
-	private function bufferapp($text, $image='', $thumb='', $link=''){
-		// You need to create an app at http://bufferapp.com/developers/apps/create before you can go any further!
-
-		// This was generated when you created your app
-		$model = new Bufferapp(Config::get('site_keys.bufferApp.key'));
-
-		$data = array('profile_ids' => array());
-
-		// Your profile ids which can be found on your dashboard (http://bufferapp.com/dashboard)
-		$data['now'] = true;
-		$data['profile_ids'][] = Config::get('site_keys.bufferApp.googleId');	//google+
-		$data['profile_ids'][] = Config::get('site_keys.bufferApp.facebookId'); 	//facebook
-
-		$text = strip_tags($text);
-		$text = preg_replace('/&nbsp;/','',$text);
-		$data['text'] = $text;
-
-		if(!empty($link)){
-			$data['media']['link'] = $link;
-		}
-		if(!empty($image)){
-			$data['media']['picture'] = URL::to('/').'/'.$image;
-		}
-		if(!empty($thumb)){
-			$data['media']['thumb'] = URL::to('/').'/'.$thumb;
-		}	
-
-		$ret = $model->post('updates/create', $data);
-
-		/**********************************************/		
-		$data['profile_ids'] = array(Config::get('site_keys.bufferApp.twitter')); //twitter	
-
-		$data['text'] = $link."\n".strip_tags($text);
-
-		if(!empty($image)){
-			$data['media']['photo'] = URL::to('/').'/'.$image;
-		}
-
-		$ret = $model->post('updates/create', $data);
 	}
 }

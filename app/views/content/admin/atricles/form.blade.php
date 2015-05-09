@@ -31,8 +31,6 @@
 
         <div class='form-group pull-right top20 left10'>
             @if (Request::segment(3)=='create')
-                {{ Form::label('bufferapp', 'BufferApp') }}
-                {{ Form::checkbox('bufferapp', 1) }}
 
                 {{ Form::label('vkcheckbox', 'VK') }}
                 {{ Form::checkbox('vkcheckbox', 1) }}

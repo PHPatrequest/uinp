@@ -55,10 +55,6 @@
                 {{ Form::checkbox('vk', 1, null, array('id' => 'vk')) }}
                 {{ Form::label('vk', 'VK') }}
             </div>
-            <div class="form-group col-md-4" style="margin-top:30px">      
-                {{ Form::checkbox('bufferapp', 1, null, array('id' => 'bufferapp')) }}
-                {{ Form::label('bufferapp', 'Bufferapp') }}
-            </div>
             <div class="form-group col-md-5" style="margin-top:30px">                
                 {{ Form::checkbox('only_with_images', 1, null, array('id' => 'only_with_images')) }}
                 {{ Form::label('only_with_images', 'Only with images') }}
@@ -71,10 +67,6 @@
         <div class="form-group col-md-12" style="margin:0 15px 20px 15px">        
             {{ Form::label('meta_keywords', 'Keywords meta name') }}
             {{ Form::text('meta_keywords', null, array('placeholder' => 'Leave empty if dont need', 'class' => 'form-control')) }}
-        </div> 
-        <div class="form-group col-md-12" style="margin:0 15px 20px 15px">        
-            {{ Form::label('meta_description', 'Description meta name') }}
-            {{ Form::text('meta_description', null, array('placeholder' => 'Leave empty if dont need', 'class' => 'form-control')) }}
         </div> 
         <div class="form-group col-md-12" style="margin:0 15px 20px 15px">        
             {{ Form::label('remove_rule', 'Remove rule (regular expression)') }}
