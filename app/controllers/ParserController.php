@@ -73,7 +73,6 @@ class ParserController extends BaseController {
 	        $model->only_with_images= Input::get('only_with_images')?1:0;
 	        $model->disabled   		= Input::get('disabled')?1:0;
 	        $model->remove_links   	= Input::get('remove_links')?1:0;
-	        $model->bufferapp   	= Input::get('bufferapp')?1:0;
 	        $model->vk   			= Input::get('vk')?1:0;
 	        $model->folder_id 		= Input::get('folder_id');
 	        $model->min_chars 		= Input::get('min_chars');
@@ -131,7 +130,6 @@ class ParserController extends BaseController {
 		        'only_with_images'	=> Input::get('only_with_images'),
 		        'disabled'   		=> Input::get('disabled'),
 		       	'remove_links'   	=> Input::get('remove_links'),
-	        	'bufferapp'   		=> Input::get('bufferapp'),
 	        	'vk'   				=> Input::get('vk'),
 	        	'folder_id' 		=> Input::get('folder_id'),
 	        	'min_chars'			=> Input::get('min_chars'),
@@ -321,18 +319,20 @@ class ParserController extends BaseController {
 				$article['description'] = $entry->description;
 				$article['content'] = (string)$articleText;
 			}
+			$article['description'] = strip_tags($article['description']);
+			$article['content'] = $this->createAbzac($article['content']);
+
+			/****Test******/
 			if(!empty($parserId)){
-			    	/****Test******/
-			    	echo 'Keywords: '.$article['keywords'].'<br>----------------------<br>';
-			    	echo 'Description: '.$article['description'].'<br>----------------------<br>';
-			    	echo "Вытаскиваем статью по URL";
-			    	echo '<pre>';
-			    	var_dump($article['content']);
-			    	echo '</pre>************************<br>';  	
-			    	/**************/
-			    	@ob_flush(); flush();
-			    }
-			@ob_flush(); flush();
+		    	echo 'Keywords: '.$article['keywords'].'<br>----------------------<br>';
+		    	echo 'Description: '.$article['description'].'<br>----------------------<br>';
+		    	echo "Вытаскиваем статью по URL";
+		    	echo '<pre>';
+		    	var_dump($article['content']);
+		    	echo '</pre>************************<br>';  	
+		    }
+		    /**************/
+		    
 			if($parserRow->min_chars > 0 && strlen($article['content']) < $parserRow->min_chars){
 				/****Test******/
 				if(!empty($parserId)){
@@ -347,8 +347,7 @@ class ParserController extends BaseController {
 		    $article['updated_at']	= date('Y-m-d H:i:s');
 		    $article['publish']		= $parserRow->publish;
 		    $article['removelinks']	= $parserRow->remove_links;
-		    $article['vk']			= $parserRow->vk;
-		    $article['bufferapp']	= $parserRow->bufferapp;		    
+		    $article['vk']			= $parserRow->vk;		    
 		    $article['parent_folder_id'] = $parserRow->folder_id;
 
 		    $imageUrl = (string)$entry->enclosure['url'];
@@ -376,7 +375,7 @@ class ParserController extends BaseController {
 				echo '<span style="color:green">Будет сохранена</span><br>';
 			}
 			/*************/
-
+			@ob_flush(); flush();
 			if(empty($parserId)){
 		    	$articleController = new ArticleController;
 		    	$articleController->postStore($article);
@@ -384,6 +383,20 @@ class ParserController extends BaseController {
     		$i++;    		   
 	    }
 	    return $i;
+	}
+
+	private function createAbzac($str){
+		$substrings = explode(". ",$str);
+		$subres = '';
+		$result = array();
+		foreach($substrings as $key => $val){ 
+		    $subres.= $val.'. ';
+		    if(($key+1)%4==0){
+		    	$result[] = '<p>'.$subres.'</p>';
+		    	$subres = '';
+		    }
+		}
+		return implode('',$result);
 	}
 
 	private function storeImage($url,$path){
