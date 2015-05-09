@@ -275,7 +275,7 @@ class ArticleController extends \BaseController {
 	 *
 	 * @return Bool
 	 */
-	private function saveSeo($itemId='',$data){
+	private function saveSeo($itemId='',$data=''){
 		$model = new Seo;
 		$model->table = 'articles';
 		$model->item_id = $itemId;
