@@ -24,6 +24,7 @@ class TagController extends BaseController {
 			$tags = explode(',',$tags);
 			$tagsIds = $tag->select('id')->whereIn('name', $tags)->get();			
 			if(!empty($tagsIds)){
+				$data = array();
 				foreach ($tagsIds as $val) {
 					$data[] = array('tag_id'=>$val->id,'table'=>$table,'element_id'=>$elementId);
 				}
