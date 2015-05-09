@@ -286,7 +286,6 @@ class ParserController extends BaseController {
 		    	if(!empty($parserRow->meta_keywords)){
 		    		$metaKeywords = $html->find('meta[name='.$parserRow->meta_keywords.']');
 		    	}
-		    	$metaDescription = $entry->description; 
 	    		$rawArticle = $html->find($parserRow->parse_rules);   		
 	    		$articleText = implode(' ',$rawArticle);
 	    		//$articleText = $this->removeTags($articleText);
@@ -310,9 +309,7 @@ class ParserController extends BaseController {
 				if(isset($metaKeywords[0]->content)){
 					$article['keywords'] = (string)$this->yandexTranslate((string)$metaKeywords[0]->content);
 				}
-				if(isset($metaDescription[0]->content)){
-					$article['description'] = (string)$this->yandexTranslate((string)$metaDescription[0]->content);
-				}
+				$article['description'] = (string)$this->yandexTranslate((string)$entry->description);
 				$article['content'] = (string)$this->yandexTranslate((string)$articleText);
 				if(empty($article['content'])){
 					$article['content'] = (string)$articleText;
@@ -321,9 +318,7 @@ class ParserController extends BaseController {
 				if(isset($metaKeywords[0]->content)){
 					$article['keywords'] = $metaKeywords[0]->content;
 				}
-				if(isset($metaDescription[0]->content)){
-					$article['description'] = $metaDescription[0]->content;
-				}
+				$article['description'] = $entry->description;
 				$article['content'] = (string)$articleText;
 			}
 			if(!empty($parserId)){
