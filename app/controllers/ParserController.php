@@ -78,7 +78,6 @@ class ParserController extends BaseController {
 	        $model->min_chars 		= Input::get('min_chars');
 	        $model->parse_rules 	= Input::get('parse_rules');
 	        $model->meta_keywords 	= Input::get('meta_keywords');
-	        $model->meta_description= Input::get('meta_description');
 	        $model->remove_rule		= Input::get('remove_rule');
         	$model->save();
 		}
@@ -135,7 +134,6 @@ class ParserController extends BaseController {
 	        	'min_chars'			=> Input::get('min_chars'),
 	        	'parse_rules'		=> Input::get('parse_rules'),
 	        	'meta_keywords'		=> Input::get('meta_keywords'),
-	        	'meta_description'	=> Input::get('meta_description'),
 	        	'remove_rule'		=> Input::get('remove_rule'),
 	        );	        
 
