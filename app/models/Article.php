@@ -96,7 +96,7 @@ class Article extends \Eloquent {
                 ->where('articles.published_at','!=','0000-00-00 00:00:00')
                 ->groupBy('articles.id')
                 ->orderby('published_at','DESC')
-                ->take(300)
+                ->take(200)
                 ->paginate(20);
     }
 
@@ -117,7 +117,7 @@ class Article extends \Eloquent {
         if($limit){
             return $result->take($limit)->get();  
         } else {
-            return $result->take(300)->paginate(20);
+            return $result->take(200)->paginate(20);
         }          
     }
 
