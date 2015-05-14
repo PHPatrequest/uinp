@@ -217,7 +217,7 @@ class ParserController extends BaseController {
 		return $res;
 	}
 
-	private function url_get_contents($url) {
+	private function curl_get_contents($url) {
 		if (!function_exists('curl_init')){
 		    die('CURL is not installed!');
 		}
@@ -278,7 +278,8 @@ class ParserController extends BaseController {
 		    if(!empty($parserRow->parse_rules)){	    	
 		    	include_once(app_path().'/helpers/simple_html_dom.php');
 		    	$html = new simple_html_dom();
-		    	$html->load($this->url_get_contents($entry->link),0);
+		    	//$html->load($this->curl_get_contents($entry->link),0);
+		    	$html->load(file_get_contents($entry->link),0);
 		    	if(!empty($parserRow->meta_keywords)){
 		    		$metaKeywords = $html->find('meta[name='.$parserRow->meta_keywords.']');
 		    	}

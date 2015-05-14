@@ -38,7 +38,7 @@
 							<img src="/{{ $item->image }}" style="width:100%; max-width:300px; margin: 0 10px 0 0" class="pull-left" title="{{ $item->img_title }}" alt="{{ $item->img_alt }}" property="image">
 						@endif	
 						<div class="text-justify" property="description">
-							{{ $item->content }}
+							{{ Common_helper::close_tags($item->content) }}
 						</div>
 						@if(!empty($item->video))
 							<iframe src="https://www.youtube.com/embed/{{ $item->video }}" class="videoframe" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
