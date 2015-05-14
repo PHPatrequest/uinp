@@ -18,6 +18,8 @@
 |
 */
 
+$start_time = microtime(TRUE);
+
 require __DIR__.'/../bootstrap/autoload.php';
 
 /*
@@ -47,3 +49,7 @@ $app = require_once __DIR__.'/../bootstrap/start.php';
 */
 
 $app->run();
+
+$end_time = microtime(TRUE);
+
+echo '<div style="text-align:center; font-size:10px">Рендер сайта  '.round($end_time - $start_time,2).' сек</div>';
