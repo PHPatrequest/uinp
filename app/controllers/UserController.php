@@ -159,7 +159,7 @@ class UserController extends BaseController {
 				$data['thumb'] = $this->createThumb($image,40,40,true);
 			} else {
 				$image = Input::get('image');
-					if(empty($image)) {
+					if(!empty($user->image)) {
 						$data['image'] = '';
 						$data['thumb'] = '';
 						unlink(public_path().'/'.$user->image);
