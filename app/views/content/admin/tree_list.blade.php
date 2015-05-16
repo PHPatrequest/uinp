@@ -6,7 +6,7 @@
             <th>Type</th>
             @if (!$inMenuEdit)
                 <th style="min-width:155px;">Created</th>
-                <th style="min-width:100px;">Actions</th>
+                <th style="min-width:130px;">Actions</th>
             @endif
         </tr>
     </thead>

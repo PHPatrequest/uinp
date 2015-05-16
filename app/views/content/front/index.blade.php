@@ -54,6 +54,7 @@
 					@endforeach
 					</div>
 					<div class="col-md-12">
+						{{ $articles->links() }}
 						<a href="/arhiv" class="btn btn-primary">Все статьи</a>
 					</div>
 				</div>

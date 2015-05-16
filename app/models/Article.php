@@ -93,11 +93,11 @@ class Article extends \Eloquent {
                 ->join('folders','folders.id','=','articles.parent_folder_id')
                 ->join('users','users.id','=','articles.user_id')
                 ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
+                ->where('articles.created_at','>',date('Y-m-d'))
                 ->where('articles.published_at','!=','0000-00-00 00:00:00')
                 ->groupBy('articles.id')
                 ->orderby('published_at','DESC')
-                ->take(20)
-                ->get();
+                ->paginate(20);
     }
 
     /**
@@ -111,9 +111,12 @@ class Article extends \Eloquent {
                     ->join('users','users.id','=','articles.user_id')
                     ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                     ->where('folders.alias',$parentAlias)
-                    ->where('articles.published_at','!=','0000-00-00 00:00:00')
-                    ->groupBy('articles.id')
-                    ->orderby('published_at','DESC');
+                    ->where('articles.published_at','!=','0000-00-00 00:00:00');
+    if($parentAlias=='news'){
+        $result->where('articles.created_at','>',date('Y-m-d'));
+    }
+        $result->groupBy('articles.id')
+               ->orderby('published_at','DESC');
         if($limit){
             return $result->take($limit)->get();  
         } else {
