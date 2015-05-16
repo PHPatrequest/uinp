@@ -41,7 +41,6 @@ class FrontController extends BaseController {
 		$search = Input::get('search');
 		if(!empty($search)){			
 			$articles = $model->searchArticles($search);
-			var_dump($articles);exit('123');
 			$breadcrumb = View::make('content.front.breadcrumb',array('items'=>'<li><span>поиск: '.$search.'</span></li>'));
 			return View::make('content.front.search',compact('articles','search','breadcrumb'));
 		}
