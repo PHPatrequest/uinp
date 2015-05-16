@@ -30,6 +30,7 @@ class FrontController extends BaseController {
 
 	public function getIndex()
 	{
+		ini_set('display_errors',1);
 		$model = new Article;	
 		$tags = Input::get('tags');
 		if(!empty($tags)){					
