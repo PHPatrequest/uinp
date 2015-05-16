@@ -3,7 +3,7 @@
 @section('main')
 	<div class="row">
 		<div class="col-md-8">
-			<h1 class="text-center">новости с тегом: {{ $tags }}</h1>	
+			<h1 class="text-center">ности по теме: {{ $tags }}</h1>	
 			@if (count($articles))
 				@foreach ($articles as $article)
 					<div class="col-md-12">

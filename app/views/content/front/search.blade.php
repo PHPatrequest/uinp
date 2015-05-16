@@ -1,6 +1,7 @@
 @extends('containers.frontend')
 @section('title')Поиск: {{ $search }}@stop
 @section('main')
+<?php exit('123'); ?>
 	<div class="row">
 		<div class="col-md-8">
 			<h1 class="text-center">вы искали: {{ $search }}</h1>	
