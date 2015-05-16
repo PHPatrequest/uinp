@@ -67,33 +67,7 @@
     </div>
 
     <!-- SEO -->
-    <div class="row">
-        <h4 class="fa fa-plus pointer seotoggle"> SEO</h4>
-        <div class="seocont">
-            <div class='form-group col-md-6'>
-                {{ Form::label('keywords', 'Keywords') }}
-                {{ Form::textarea('keywords', null, array('class' => 'form-control hgt100')) }}
-            </div>
-
-            <div class='form-group col-md-6'>
-                {{ Form::label('description', 'Description') }}
-                {{ Form::textarea('description', null, array('class' => 'form-control hgt100')) }}
-            </div>
-
-            <div class='form-group col-md-6'>
-                {{ Form::label('img_alt', 'Image alt') }}
-                {{ Form::text('img_alt', null, array('class' => 'form-control')) }}
-            </div>
-
-            <div class='form-group col-md-6'>
-                {{ Form::label('img_title', 'Image title') }}
-                {{ Form::text('img_title', null, array('class' => 'form-control')) }}
-            </div>
-
-            {{ Form::hidden('seoid', null, array('class' => 'form-control')) }}
-            {{ Form::hidden('table', 'articles', array('class' => 'form-control')) }}
-        </div>
-    </div>
+    @include('content.admin.seo.main')
     <!-- end seo -->
 
     <div class='form-group'>
@@ -209,11 +183,6 @@
                 $('#imgInp').val('');
                 $('#image_path').val('');
                 $('#image_thumb').val('');
-            });
-
-            $('.seotoggle').on('click',function(){
-                $(this).parent().find('.seocont').slideToggle();
-                $(this).toggleClass('fa-minus');
             });
 
             $('.iframe-btn').fancybox({ 

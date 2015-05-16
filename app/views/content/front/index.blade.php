@@ -1,7 +1,7 @@
 @extends('containers.frontend')
 @section('title')
-	@if(isset($seoData->title))
-		{{ $seoData->title }}
+	@if(isset($seoData->seo_title))
+		{{ $seoData->seo_title }}
 	@endif
 @stop
 @section('seoMeta')
@@ -54,7 +54,7 @@
 					@endforeach
 					</div>
 					<div class="col-md-12">
-						{{ $articles->links() }}
+						<a href="/arhiv" class="btn btn-primary">Все статьи</a>
 					</div>
 				</div>
 			@endif

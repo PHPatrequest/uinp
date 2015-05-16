@@ -75,8 +75,8 @@ class FolderController extends BaseController {
 	        $model->path 				= $this->getPath($parent_folder_id, $alias);
         	$model->save();
         	$this->saveAlias(Input::get('alias'),$model->id,'folders',$parent_folder_id);
+        	$this->saveSeo($model->id,'folders');
 		}
-
 		//folder::create($data);
 		Session::flash('success', 'Folder successfully created!');
 		return Redirect::to(URL::to('admin/folders'));
@@ -90,7 +90,8 @@ class FolderController extends BaseController {
 	 */
 	public function getEdit($id)
 	{
-		$folder = Folder::find($id);
+		$model = new Folder;
+		$folder = $model->getFolderWhithSeo($id);
 		if(!empty($folder)){
 			$folders = Folder::all();			
 			$current_folder_id = $id;
@@ -110,7 +111,7 @@ class FolderController extends BaseController {
 	 */
 	public function putUpdate($id)
 	{
-		$model = Folder::findOrFail($id);
+		$model = Folder::find($id);
 		$parent_folder_id 	= Input::get('folder_id');
 		$alias = Alias::where('item_id',$id)->where('table','folders')->first();						
 
@@ -144,6 +145,7 @@ class FolderController extends BaseController {
         	} else {
         		$this->saveAlias(Input::get('alias'),$model->id,'folders',$parent_folder_id);
         	}
+        	$this->saveSeo($id,'folders');
 		}
 		Session::flash('success', 'Folder successfully updated!');
 		return Redirect::to(URL::to('admin/folders'));

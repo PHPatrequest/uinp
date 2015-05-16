@@ -33,6 +33,19 @@ class Folder extends \Eloquent {
         return $folders;
 	}
 
+    /**
+     * Get article with seo by id
+     *
+     * @return Obj  
+     */
+    public function getFolderWhithSeo($id){
+        $result =  DB::table('folders')->select('folders.*','seo.keywords','seo.description','seo.img_alt','seo.img_title','seo.seo_title','seo.id as seoid')                    
+                    ->leftjoin('seo','seo.item_id','=',DB::raw(DB::getTablePrefix().'folders.id AND '.DB::getTablePrefix().'seo.table = "folders"'))
+                    ->where('folders.id',$id)
+                    ->first();
+        return $result;
+    }
+
     public function getFoldersByParentId($parenId){
         $folders =  DB::table('folders')
                 ->where('parent_folder_id',$parenId)

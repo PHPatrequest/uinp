@@ -33,7 +33,7 @@
 						{{ $menu->top }}
 					@endif
 				</div>
-				<div class="pull-left phone" style="margin: 4px 0 0 15px; text-decoration:none;">телефон редакции: <a href="tel:380443922975" style="text-decoration:none;">+38 (044) 392-29-75</a></div>	
+				<div class="pull-left phone" style="margin: 4px 0 0 15px; text-decoration:none; display:none">телефон редакции: <a href="tel:380443922975" style="text-decoration:none;">+38 (044) 392-29-75</a></div>	
 			</div>
 			
 			<div class="col-md-3">	

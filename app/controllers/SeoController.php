@@ -83,7 +83,7 @@ class SeoController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function postStore($itemId='')
+	public function postStore()
 	{
 		$validator = Validator::make(Input::all(), $this->rules);
 
@@ -91,22 +91,20 @@ class SeoController extends BaseController {
 		{
 			return Redirect::back()->withErrors($validator)->withInput(Input::all());
 		} else {
-			$model = new Seo;
-			$url = Input::get('url');
-			$table = Input::get('table');
-			$title = Input::get('title');
-			if(empty($itemId)){
-				$itemId = Input::get('item_id');				
-			}
+			$model 	= new Seo;
+			$url 		= Input::get('url');
+			$table 		= Input::get('table');
+			$title 		= Input::get('seo_title');
+			$item_id 	= Input::get('item_id');
  
-  			$model->title 		= isset($title)?$title:'';
+  			$model->seo_title 	= isset($title)?$title:'';
 	        $model->keywords   	= Input::get('keywords');
 	        $model->description = Input::get('description');
 	        $model->img_alt 	= Input::get('img_alt');
 	        $model->img_title 	= Input::get('img_title');
 	        $model->url   		= !empty($url)?$url:'';
 	        $model->table 		= !empty($table)?$table:'';
-	        $model->item_id 	= $itemId;
+	        $model->item_id 	= !empty($item_id)?$item_id:'';;
 
         	$model->save();
 		}
@@ -135,10 +133,10 @@ class SeoController extends BaseController {
 		{
 			return Redirect::back()->withErrors($validator)->withInput();
 		} else {
-			$title = Input::get('title');
+			$title = Input::get('seo_title');
 			$data = array(
 				'url'   		=> Input::get('url'),
-				'title'   		=> isset($title)?$title:'',
+				'seo_title'   	=> isset($title)?$title:'',
 		        'keywords'   	=> Input::get('keywords'),
 		        'description'   => Input::get('description'),
 		        'img_alt'   	=> Input::get('img_alt'),

@@ -20,7 +20,7 @@
             <thead>
                 <tr>
                     {{ Common_helper::sorting_table_fields($table_fields) }}
-                    <th style="width: 170px;">Actions</th>
+                    <th style="min-width: 130px;">Actions</th>
                 </tr>
             </thead>
 
@@ -33,7 +33,6 @@
                         <td>{{ $folder->created_at }}</td>
                         <td>{{ $folder->updated_at }}</td>
                         <td>
-                            {{ link_to('admin/seo/item/folders/'.$folder->id, 'SEO', array('class' => 'btn btn-info btn-xs pull-left')) }}
                             {{ link_to('admin/folders/edit/'.$folder->id, 'Edit', array('class' => 'btn btn-info btn-xs pull-left left10', 'title'=>'edit')) }}
                             @if($folder->undeletable==0)
                                 {{ Form::open(array('url' => 'admin/folders/destroy/' . $folder->id, 'method' => 'DELETE')) }}

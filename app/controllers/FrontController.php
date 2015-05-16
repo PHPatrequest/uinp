@@ -78,8 +78,8 @@ class FrontController extends BaseController {
 
 			$item = array_pop($items);			
 
-			if(!empty($this->seo->title)){
-				$item->title = $this->seo->title;
+			if(!empty($this->seo->seo_title)){
+				$item->title = $this->seo->seo_title;
 			}								
 			if(!empty($this->seo->description)){
 				$item->description = $this->seo->description;
@@ -152,7 +152,7 @@ class FrontController extends BaseController {
 		}
 		$tablePrefix = DB::getTablePrefix();
 		$result = DB::table($element->table)
-			->select($element->table.'.*','users.username','users.google_account','users.thumb as userthumb','seo.title as seo_title','seo.keywords','seo.description','seo.img_alt','seo.img_title', DB::raw('GROUP_CONCAT('.$tablePrefix.'tags.name) as tags'))
+			->select($element->table.'.*','users.username','users.google_account','users.thumb as userthumb','seo.seo_title','seo.keywords','seo.description','seo.img_alt','seo.img_title', DB::raw('GROUP_CONCAT('.$tablePrefix.'tags.name) as tags'))
 			->join('users','users.id','=',$element->table.'.user_id')
 			->leftjoin('seo','seo.item_id','=',DB::raw($tablePrefix.$element->table.'.id AND '.$tablePrefix.'seo.table = "'.$element->table.'"'))
 			->leftjoin('tagstoelement','tagstoelement.element_id','=',DB::raw($tablePrefix.$element->table.'.id AND '.$tablePrefix.'tagstoelement.table = "'.$element->table.'"'))

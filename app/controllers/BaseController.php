@@ -95,4 +95,36 @@ class BaseController extends Controller {
 		->save($thumbPath);
 		return $thumbPath;
 	}
+
+	/**
+	 * Save seo data
+	 *
+	 * @return Bool
+	 */
+	public function saveSeo($itemId='',$table,$data=''){
+		$model = new Seo;
+		$model->table = $table;
+		$model->item_id = $itemId;
+		if(empty($data)){
+			$model->seo_title 	= Input::get('seo_title');
+			$model->keywords 	= Input::get('keywords');
+			$model->description = Input::get('description');
+			$model->img_alt 	= Input::get('img_alt');
+			$model->img_title 	= Input::get('img_title');
+		} else {
+			$model->keywords 	= $data['keywords'];
+			$model->description = $data['description'];
+		}
+		if(!empty($model->seo_title) || !empty($model->keywords) || !empty($model->description) || !empty($model->img_alt) || !empty($model->img_title)){			
+	    	$seoid = Input::get('seoid');
+    		if(!empty($seoid)){
+    			$seoController = new SeoController;
+    			$seoController->putUpdate($seoid);
+    		} else if(!empty($itemId)) {
+    			$model->save();        			
+    		}
+    		return true;
+    	}
+    	return false;
+	}
 }

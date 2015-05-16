@@ -19,7 +19,7 @@
             <thead>
                 <tr>
                     {{ Common_helper::sorting_table_fields($table_fields) }}
-                    <th style="width: 170px;">Actions</th>
+                    <th style="min-width: 130px;">Actions</th>
                 </tr>
             </thead>
 
@@ -31,7 +31,6 @@
                         <td>{{ $article->created_at }}</td>
                         <td title="To search not published enter 0000">{{ $article->published_at=="0000-00-00 00:00:00"?'Not Published (hint)':$article->published_at }}</td>
                         <td>
-                            {{ link_to('admin/seo/item/articles/'.$article->id, 'SEO', array('class' => 'btn btn-info btn-xs pull-left')) }}
                             {{ link_to('admin/articles/edit/'.$article->id, 'Edit', array('class' => 'btn btn-info btn-xs pull-left left10', 'title'=>'edit')) }}
                             {{ Form::open(array('url' => 'admin/articles/destroy/' . $article->id, 'method' => 'DELETE')) }}
                                 {{ Form::submit('Delete', array('class' => 'btn btn-danger btn-xs left10','onclick'=>'return confirm(\'Delete article?\')?true:false;')) }}

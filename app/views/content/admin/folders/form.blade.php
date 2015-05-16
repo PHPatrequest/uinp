@@ -32,8 +32,15 @@
             {{ Form::text('alias', null, array('placeholder' => 'Alias', 'class' => 'form-control', 'id' => 'folder-alias-input')) }}
         </div>
 
+
+        <div class='col-md-12'>
+            <!-- SEO -->
+            @include('content.admin.seo.main')
+            <!-- end seo -->
+        </div>
+
         <div class='form-group col-md-12'>
-            {{ Form::textarea('text', null, array('class' => 'form-control')) }}
+            {{ Form::textarea('text', null, array('class' => 'form-control folder_desc')) }}
         </div>
     </div>
 
@@ -49,7 +56,7 @@
     <script type="text/javascript" src="{{ asset('packages/tinymce/tinymce.min.js') }}"></script>
     <script>
     tinymce.init({
-        selector: "textarea",
+        selector: ".folder_desc",
         height : 300,
         plugins: [
             "advlist autolink lists link responsivefilemanager image charmap print preview anchor textcolor",

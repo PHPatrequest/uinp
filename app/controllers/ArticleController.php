@@ -69,7 +69,7 @@ class ArticleController extends \BaseController {
 			$video 				= Input::get('video');
 			$removeLinks 		= Input::get('removelinks');
 
-			$socialParams['vk'] 		= Input::get('vkcheckbox');
+			$socialParams['vk'] = Input::get('vkcheckbox');
 
 			if(Input::hasFile('userfile')) {
 				$image = Common_helper::fileUpload(Input::file('userfile'),'articles',$alias);
@@ -87,7 +87,7 @@ class ArticleController extends \BaseController {
 			$removeLinks 		= $data['removelinks'];
 			$image 				= $data['image'];
 
-			$socialParams['vk'] 		= $data['vk'];
+			$socialParams['vk'] = $data['vk'];
 
 			$validator = Validator::make($data, $this->rules);
 		}
@@ -131,7 +131,7 @@ class ArticleController extends \BaseController {
         	$TagController = new TagController;
         	$TagController->addTags($tags,'articles',$model->id);
 
-        	$this->saveSeo($model->id, $data);	
+        	$this->saveSeo($model->id,'articles',$data);	
   
 	        $this->postSocNetworks($model,$tags,$socialParams);
         	$this->saveAlias($alias,$model->id,'articles',$parentFolderId);  	
@@ -175,9 +175,6 @@ class ArticleController extends \BaseController {
 	 */
 	public function getEdit($id='')
 	{
-		if(empty($id)){
-			App::abort(404);
-		}
 		$model = new Article;
 		$article = $model->getArticleWhithSeo($id);
 		if(!empty($article)){
@@ -209,8 +206,8 @@ class ArticleController extends \BaseController {
 			$content = preg_replace('/<a.*<\/a>/','',$content);
 		}
 
-		$alias = Alias::where('item_id',$id)->where('table','articles')->first();						
-		if(!empty($alias)){		
+		$alias = Alias::where('item_id',$id)->where('table','articles')->first();					
+		if(isset($alias->id) && !empty($alias->id)){		
 			$this->rules['alias']	= 'max:255|required|unique:aliases,alias,'.$alias->id;
 		}
 
@@ -259,43 +256,10 @@ class ArticleController extends \BaseController {
         		$this->saveAlias(Input::get('alias'),$model->id,'articles',$parent_folder_id);
         	}
 
-        	$this->saveSeo($id);
+        	$this->saveSeo($id,'articles');
 		}
 		Session::flash('success', 'Successfully updated!');
 		return Redirect::to('admin/articles');
-	}
-
-	/**
-	 * Save seo data
-	 *
-	 * @return Bool
-	 */
-	private function saveSeo($itemId='',$data=''){
-		$model = new Seo;
-		$model->table = 'articles';
-		$model->item_id = $itemId;
-		if(empty($data)){
-			$model->keywords = Input::get('keywords');
-			$model->description = Input::get('description');
-			$model->img_alt = Input::get('img_alt');
-			$model->img_title = Input::get('img_title');
-		} else {
-			$model->keywords = $data['keywords'];
-			$model->description = $data['description'];
-			$model->img_alt = '';
-			$model->img_title = '';
-		}
-		if(!empty($model->keywords) || !empty($model->description) || !empty($model->img_alt) || !empty($model->img_title)){			
-	    	$seoid = Input::get('seoid');
-    		if(!empty($seoid)){
-    			$seoController = new SeoController;
-    			$seoController->putUpdate($seoid);
-    		} else if(!empty($itemId)) {
-    			$model->save();        			
-    		}
-    		return true;
-    	}
-    	return false;
 	}
 
 	/**
