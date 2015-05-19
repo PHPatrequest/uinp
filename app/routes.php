@@ -44,7 +44,8 @@ Route::group(array('before' => 'is_admin'), function() {
      Route::controller('admin/menus', 'MenuController');
      Route::controller('admin/users', 'UserController');
      Route::get('admin/parser/parse/{parserId?}', 'ParserController@getParse'); 
-     Route::controller('admin/parser', 'ParserController');  
+     Route::controller('admin/parser', 'ParserController');
+     Route::controller('admin/parser2', 'Parser2Controller');   
 });
 
 
