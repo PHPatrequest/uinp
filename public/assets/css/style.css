@@ -477,3 +477,11 @@ h4{
 		display: block !important;
 	}
 }
+.rt_td_30655{
+	padding: 3px!important;
+	vertical-align: top!important;
+	display: block;
+	width: 170px;
+	min-height: 200px;
+	float: left;
+}
