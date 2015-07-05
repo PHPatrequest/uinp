@@ -21,7 +21,7 @@
             <thead>
                 <tr>
                     {{ Common_helper::sorting_table_fields($table_fields) }}
-                    <th style="width: 170px;">Actions</th>
+                    <th style="width: 270px;">Actions</th>
                 </tr>
             </thead>
 
@@ -35,6 +35,7 @@
                         <td>{{ $item->username }}</td>
                         <td> 
                             {{ link_to('admin/parser2/parse/'.$item->id, 'Test', array('class' => 'btn btn-success btn-xs pull-left left10', 'title'=>'edit')) }}                       
+                            {{ link_to('admin/parser2/parse/'.$item->id.'/links', 'Test Links', array('class' => 'btn btn-success btn-xs pull-left left10', 'title'=>'edit')) }}
                             {{ link_to('admin/parser2/edit/'.$item->id, 'Edit', array('class' => 'btn btn-info btn-xs pull-left left10', 'title'=>'edit')) }}
                             {{ Form::open(array('url' => 'admin/parser2/destroy/' . $item->id, 'method' => 'DELETE')) }}
                                 {{ Form::submit('Delete', array('class' => 'btn btn-danger btn-xs left10','onclick'=>'return confirm(\'Delete item?\')?true:false;'))}}

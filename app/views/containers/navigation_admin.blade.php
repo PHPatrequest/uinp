@@ -30,7 +30,14 @@
                 </li>
                 <li class="{{ Request::segment(2)=='menus'?'active':'' }}">{{ link_to('admin/menus','Menus') }}</li>
                 <li class="{{ Request::segment(2)=='users'?'active':'' }}">{{ link_to('admin/users','Users') }}</li>
-                <li class="{{ Request::segment(2)=='parser'?'active':'' }}">{{ link_to('admin/parser','Parser') }}</li>                                 
+                                                 
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Parsers <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li class="{{ Request::segment(2)=='parser'?'active':'' }}">{{ link_to('admin/parser','Parser RSS') }}</li>
+                    <li class="{{ Request::segment(2)=='parser2'?'active':'' }}">{{ link_to('admin/parser2','Parser V2') }}</li>                
+                  </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>

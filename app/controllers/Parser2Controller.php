@@ -169,9 +169,10 @@ class Parser2Controller extends BaseController {
 	private function curl($url){
 		$curl = curl_init();
 		curl_setopt_array($curl, Array(
-		    CURLOPT_URL            => $url,
-		    CURLOPT_RETURNTRANSFER => TRUE,
-		    CURLOPT_ENCODING       => 'UTF-8'
+		    CURLOPT_URL            	=> $url,
+		    CURLOPT_RETURNTRANSFER 	=> TRUE,
+		    CURLOPT_TIMEOUT			=> 400,
+		    CURLOPT_ENCODING       	=> 'UTF-8'
 		));
 		$data = curl_exec($curl);
 		curl_close($curl);
@@ -202,20 +203,11 @@ class Parser2Controller extends BaseController {
 	    return $data;
 	}
 
-	private function getParserLinks($parserRow){
-		$linksPage = $this->curl($parserRow->parse_url);
-		preg_match_all('|'.$parserRow->links_rule.'|',$linksPage,$matches,PREG_PATTERN_ORDER);
-		if(isset($matches[1]) && !empty($matches[1])){
-			foreach ($matches[1] as $key => $val) {
-				$liks[] = $parserRow->url.$val;
-			}
-			return $liks;
-		}
-		return false;
-	}
-
-	public function getParse($parserId=''){
+	public function getParse($parserId='',$linksTest=''){
 		header('Content-Type: text/html; charset=utf-8');
+		include_once(app_path().'/helpers/simple_html_dom.php');
+		$htmlDom = new simple_html_dom();
+
 		if(empty($parserId)){
 			$parserData = Parser2::all();
 		} else {
@@ -224,14 +216,18 @@ class Parser2Controller extends BaseController {
 		if(!empty($parserData)){
 			foreach ($parserData as $parserRow) {
 				if($parserRow->disabled==0 || !empty($parserId)){
-					$links = $this->getParserLinks($parserRow);
-					//var_dump($links);exit;
-					if($links){
+					$html = $this->curl($parserRow->parse_url);
+					$htmlDom->load($html);
+					$links = $htmlDom->find($parserRow->links_rule);
+
+					if(count($links) && empty($linksTest)){
+						$itemsCount = $this->storeParsed($links,$parserRow,$parserId);
+					} elseif(!empty($linksTest)) {
 						foreach ($links as $link) {
-							$newsHtml = $this->curl($link);
-							preg_match_all('|'.$parserRow->image_rule.'|',$newsHtml,$matches,PREG_PATTERN_ORDER);
-							var_dump($matches);exit;
+							echo '<div><a href="'.$parserRow->url.$link->href.'">'.$parserRow->url.$link->href.'</a></div>';
 						}
+					} else {
+						echo 'Не удалось получить список ссылок';
 					}
 				}
 			}	
@@ -249,118 +245,105 @@ class Parser2Controller extends BaseController {
 		return $res;
 	}
 
-	private function storeParsed($rss,$parserRow,$parserId){	
-		$saveData = array();
-		$i = 0;
-	    foreach($rss->channel->item as $entry) {
+	private function storeParsed($links,$parserRow,$parserId){
+		$htmlDom = new simple_html_dom();
+		$i=0;
 
-			if(!empty($parserId)){
-		    	/****Test******/
-		    	echo "<br>Парсим запись из RSS";
-		    	echo '<pre>';
-		    	var_dump($entry);
-		    	echo '</pre>-----------------------<br>';
-		    	/**************/
-		    }
+	    foreach($links as $link) {
+	    	$articleHtml = $this->curl($parserRow->url.$link->href);
+	    	$htmlDom->load($articleHtml);
 
-	    	$article = array();
+	    	$article['title'] 		= '';
+			$article['content'] 	= '';
+			$article['description'] = '';
+			$article['image']		= '';
+	    	$article['keywords']	= '';
 
-	    	if($parserRow->translate == 1){
-	    		$article['title'] = (string)$this->yandexTranslate((string)$entry->title);
-	    		if(empty($article['content'])){
-	    			$article['title'] = (string)$entry->title; 
+	    	if(!empty($parserRow->title_rule)){
+	    		$article['title'] 	  = $htmlDom->find($parserRow->title_rule,0);
+	    		if(!empty($article['title'])){
+	    			$article['title'] = $article['title']->plaintext;
 	    		}
-		    } else {
-		    	$article['title'] = (string)$entry->title;   	 			    	
-		    }
-		    $article['alias'] = $this->generateAlias($article['title']);
+	    	}
+	    	if(!empty($parserRow->text_rule)){
+				$article['content'] = implode(' ',$htmlDom->find($parserRow->text_rule));
+			}
+			if(!empty($parserRow->description_rule)){
+				$article['description'] 	= $htmlDom->find($parserRow->description_rule,0);
+				if(!empty($article['description'])){
+					$article['description'] = $article['description']->content;
+				}
+			}
+			if(!empty($parserRow->image_rule)){			// куча проверок из-за russvesna
+				$article['image'] 	= $htmlDom->find($parserRow->image_rule,0);
+				if(!empty($article['image'])){
+					$article['image'] 	= $article['image']->src;
+				}
+				if(empty($article['image'])){
+		    		$article['image'] = $htmlDom->find($parserRow->image_rule,1);
+			    	if(!empty($article['image'])){
+						$article['image'] = $htmlDom->find($parserRow->image_rule,1)->src;
+					}
+		    	}
+			}
+			if(!empty($parserRow->keywords_rule)){
+		    	$keywords = $htmlDom->find($parserRow->keywords_rule);
+		    	if(!empty($keywords)){
+					foreach ($keywords as $keyword) {
+						if(!empty($keyword->content)){
+							$article['keywords'] = $keyword->content;
+						}
+						if(!empty($keyword->plaintext)){
+							$article['keywords'].= $keyword->plaintext.',';
+						}
+					}
+					trim($article['keywords'],',');
+				}
+			}
+
+	    	/*****Test*****/
+			if(!empty($parserId)){
+				echo '<h1>Парсим запись по линке</h1> <a href="'.$parserRow->url.$link->href.'">'.$parserRow->url.$link->href.'</a>';
+				echo '<br><br><strong>Title: </strong>'.$article['title'];
+				echo '<br><br><strong>Description: </strong>'.$article['description'];
+				echo '<br><br><strong>Image: </strong><img src="'.$article['image'].'">';
+				echo '<br><br><strong>Text: </strong>'.$article['content'];
+				echo '<br><br><strong>Tags (Keywords): </strong> '.$article['keywords'];	
+			}
+			/**************/
+
+	    	$article['user_id'] 			= $parserRow->author;
+		    $article['created_at']			= date('Y-m-d H:i:s');
+		    $article['updated_at']			= date('Y-m-d H:i:s');
+		    $article['publish']				= $parserRow->publish;
+		    $article['removelinks']			= $parserRow->remove_links;
+		    $article['vk']					= $parserRow->vk;		    
+		    $article['parent_folder_id'] 	= $parserRow->folder_id;
+
+			$article['alias'] = $this->generateAlias($article['title']);			//Делаем алиас
 
 		    if(!$this->aliasUnique($article['alias'])){
-				/****Test******/
+				/*****Test*****/
 				if(!empty($parserId)){
-					echo '<span style="color:red">Уже сохранена</span><br>';
+					echo '<div style="color:red">Уже сохранена</div><br>';
+					@ob_flush(); flush();
 				}
 				/*************/
 		    	continue;
 		    }
-		    if(!empty($parserRow->parse_rules)){	    	
-		    	include_once(app_path().'/helpers/simple_html_dom.php');
-		    	$html = new simple_html_dom();
-		    	//$html->load($this->curl_get_contents($entry->link),0);
-		    	$html->load(file_get_contents($entry->link),0);
-		    	if(!empty($parserRow->meta_keywords)){
-		    		$metaKeywords = $html->find('meta[name='.$parserRow->meta_keywords.']');
-		    	}
-	    		$rawArticle = $html->find($parserRow->parse_rules);   		
-	    		$articleText = implode(' ',$rawArticle);
-	    		//$articleText = $this->removeTags($articleText);
-	    		$articleText = strip_tags($articleText);
-		    } else {
-		    	$articleText = $entry->description;
-		    }
-
-	    	if(empty($articleText)){
-    			/****Test******/
+		    if($parserRow->min_chars > 0 && strlen($article['content']) < $parserRow->min_chars){
+				/*****Test*****/
 				if(!empty($parserId)){
-					echo '<span style="color:red">Пустой контент</span><br>';
+					echo '<div style="color:red">Недостаточно символов</div><br>';
+					@ob_flush(); flush();
 				}
-				/*************/
-    			continue;
-    		}
-
-		    $article['keywords'] = '';
-		    $article['description'] = '';
-			if($parserRow->translate == 1){
-				if(isset($metaKeywords[0]->content)){
-					$article['keywords'] = (string)$this->yandexTranslate((string)$metaKeywords[0]->content);
-				}
-				$article['description'] = (string)$this->yandexTranslate((string)$entry->description);
-				$article['content'] = (string)$this->yandexTranslate((string)$articleText);
-				if(empty($article['content'])){
-					$article['content'] = (string)$articleText;
-				}
-			} else {
-				if(isset($metaKeywords[0]->content)){
-					$article['keywords'] = $metaKeywords[0]->content;
-				}
-				$article['description'] = $entry->description;
-				$article['content'] = (string)$articleText;
-			}
-			$article['description'] = strip_tags($article['description']);
-			$article['content'] = $this->createAbzac($article['content']);
-
-			/****Test******/
-			if(!empty($parserId)){
-		    	echo 'Keywords: '.$article['keywords'].'<br>----------------------<br>';
-		    	echo 'Description: '.$article['description'].'<br>----------------------<br>';
-		    	echo "Вытаскиваем статью по URL";
-		    	echo '<pre>';
-		    	var_dump($article['content']);
-		    	echo '</pre>************************<br>';  	
-		    }
-		    /**************/
-		    
-			if($parserRow->min_chars > 0 && strlen($article['content']) < $parserRow->min_chars){
-				/****Test******/
-				if(!empty($parserId)){
-					echo '<span style="color:red">Недостаточно символов</span><br>';
-				}
-				/*************/
+				/*************/	
 				continue;
 			}
 
-		    $article['user_id'] 	= $parserRow->author;
-		    $article['created_at']	= date('Y-m-d H:i:s');
-		    $article['updated_at']	= date('Y-m-d H:i:s');
-		    $article['publish']		= $parserRow->publish;
-		    $article['removelinks']	= $parserRow->remove_links;
-		    $article['vk']			= $parserRow->vk;		    
-		    $article['parent_folder_id'] = $parserRow->folder_id;
-
-		    $imageUrl = (string)$entry->enclosure['url'];
-		    if(!empty($imageUrl)){
+		    if(!empty($article['image'])){
 			    $imagePath = 'uploads/articles/'.$article['alias'].'.jpg';
-			    $this->storeImage($imageUrl,$imagePath);
+			    $this->storeImage($article['image'],$imagePath);
 			    $article['image'] = array(
 			    	'name'	=> $article['alias'].'.jpg',
 			    	'path'	=> $imagePath,
@@ -369,20 +352,28 @@ class Parser2Controller extends BaseController {
 				if($parserRow->only_with_images == 1){
 					/****Test******/
 					if(!empty($parserId)){
-						echo '<span style="color:red">Нет картинки</span><br>';
+						echo '<div style="color:red">Нет картинки</div><br>';
+						@ob_flush(); flush();
 					}
-					/*************/
+					/*************/	
 					continue;
 				}
-				$article['image'] = '';
 			}
+
+	    	if($parserRow->translate == 1){
+	    		$article['title'] 		= (string)$this->yandexTranslate((string)$article['title']);
+	    		$article['keywords'] 	= (string)$this->yandexTranslate((string)$article['keywords']);
+	    		$article['description'] = (string)$this->yandexTranslate((string)$article['description']);
+	    		$article['content'] 	= (string)$this->yandexTranslate((string)$article['content']);
+	    	}
 
 			/****Test******/
 			if(!empty($parserId)){
-				echo '<span style="color:green">Будет сохранена</span><br>';
+				echo '<br><div style="color:green">Будет сохранена</div><br>';
+				@ob_flush(); flush();
 			}
 			/*************/
-			@ob_flush(); flush();
+			
 			if(empty($parserId)){
 		    	$articleController = new ArticleController;
 		    	$articleController->postStore($article);
