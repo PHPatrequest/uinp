@@ -247,11 +247,16 @@ class Parser2Controller extends BaseController {
 	}
 
 	private function storeParsed($links,$parserRow,$parserId){
+		header('Content-Type: text/html; charset=utf-8');
 		$htmlDom = new simple_html_dom();
 		$i=0;
 
 	    foreach($links as $link) {
-	    	$articleHtml = $this->curl($parserRow->url.$link->href);
+	    	preg_match('/http/', $link, $matches);
+	    	if(!isset($matches[0])){
+	    		$link->href = $parserRow->url.$link->href;
+	    	}
+	    	$articleHtml = $this->curl($link->href);
 	    	$htmlDom->load($articleHtml);
 
 	    	$article['title'] 		= '';
