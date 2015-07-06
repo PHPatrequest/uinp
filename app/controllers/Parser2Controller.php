@@ -282,7 +282,7 @@ class Parser2Controller extends BaseController {
 				$text = $htmlDom->find($parserRow->text_rule);
 				if(count($text)){
 					foreach ($text as $value) {
-						$article['content'].= $value;
+						$article['content'].= $value->plaintext;
 					}
 				}
 			}
