@@ -347,14 +347,14 @@ class Parser2Controller extends BaseController {
 				continue;
 			}
 
-		    if(!empty($article['image'])){
-			    $imagePath = 'uploads/articles/'.$article['alias'].'.jpg';
-			    $this->storeImage($article['image'],$imagePath);
-			    $article['image'] = array(
-			    	'name'	=> $article['alias'].'.jpg',
-			    	'path'	=> $imagePath,
-			    );
-			} else {
+		 //    if(!empty($article['image'])){
+			//     $imagePath = 'uploads/articles/'.$article['alias'].'.jpg';
+			//     $this->storeImage($article['image'],$imagePath);
+			//     $article['image'] = array(
+			//     	'name'	=> $article['alias'].'.jpg',
+			//     	'path'	=> $imagePath,
+			//     );
+			// } else {
 				if($parserRow->only_with_images == 1){
 					/****Test******/
 					if(!empty($parserId)){
@@ -364,7 +364,7 @@ class Parser2Controller extends BaseController {
 					/*************/	
 					continue;
 				}
-			}
+			//}
 
 	    	if($parserRow->translate == 1){
 	    		$article['title'] 		= (string)$this->yandexTranslate((string)$article['title']);
