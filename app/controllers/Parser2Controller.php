@@ -284,6 +284,7 @@ class Parser2Controller extends BaseController {
 					foreach ($text as $value) {
 						$article['content'].= $value->plaintext;
 					}
+					$article['content'] = $this->createAbzac($article['content']);
 				}
 			}
 			if(!empty($parserRow->description_rule)){
