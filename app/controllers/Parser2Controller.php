@@ -225,7 +225,8 @@ class Parser2Controller extends BaseController {
 						$itemsCount = $this->storeParsed($links,$parserRow,$parserId);
 					} elseif(!empty($linksTest)) {
 						foreach ($links as $link) {
-							echo '<div><a href="'.$parserRow->url.$link->href.'">'.$parserRow->url.$link->href.'</a></div>';
+							$link->href = $this->combineLinks($link->href,$parserRow->url);
+							echo '<div><a href="'.$link->href.'">'.$link->href.'</a></div>';
 						}
 					} else {
 						echo 'Не удалось получить список ссылок';
@@ -236,6 +237,14 @@ class Parser2Controller extends BaseController {
 		if(empty($parserId)){	
 			return Redirect::to('/admin/parser2');
 		}
+	}
+
+	private function combineLinks($link,$url){
+		preg_match('/http/', $link, $matches);
+    	if(!isset($matches[0])){
+    		$link = $url.$link;
+    	}
+    	return $link;
 	}
 
 	private function removeTags($html){
@@ -252,10 +261,8 @@ class Parser2Controller extends BaseController {
 		$i=0;
 
 	    foreach($links as $link) {
-	    	preg_match('/http/', $link, $matches);
-	    	if(!isset($matches[0])){
-	    		$link->href = $parserRow->url.$link->href;
-	    	}
+	    	$link->href = $this->combineLinks($link->href,$parserRow->url);
+
 	    	$articleHtml = $this->curl($link->href);
 	    	$htmlDom->load($articleHtml);
 
@@ -272,8 +279,12 @@ class Parser2Controller extends BaseController {
 	    		}
 	    	}
 	    	if(!empty($parserRow->text_rule)){
-				$article['content'] = $htmlDom->find($parserRow->text_rule,0)->plaintext;
-				$article['content'] = $this->createAbzac($article['content']);
+				$text = $htmlDom->find($parserRow->text_rule);
+				if(count($text)){
+					foreach ($text as $value) {
+						$article['content'].= $value;
+					}
+				}
 			}
 			if(!empty($parserRow->description_rule)){
 				$article['description'] 	= $htmlDom->find($parserRow->description_rule,0);
@@ -314,7 +325,7 @@ class Parser2Controller extends BaseController {
 
 	    	/*****Test*****/
 			if(!empty($parserId)){
-				echo '<h1>Парсим запись по линке</h1> <a href="'.$parserRow->url.$link->href.'">'.$parserRow->url.$link->href.'</a>';
+				echo '<h1>Парсим запись по линке</h1> <a href="'.$link->href.'">'.$link->href.'</a>';
 				echo '<br><br><strong>Title: </strong>'.$article['title'];
 				echo '<br><br><strong>Description: </strong>'.$article['description'];
 				echo '<br><br><strong>Image: </strong><img src="'.$article['image'].'">';
