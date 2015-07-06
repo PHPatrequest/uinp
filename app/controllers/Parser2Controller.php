@@ -417,7 +417,11 @@ class Parser2Controller extends BaseController {
 		    	$subres = '';
 		    }
 		}
-		return implode('',$result);
+		$result = implode('',$result);
+		if(empty($result)){
+			return '<p>'.$str.'</p>';
+		}
+		return $result;
 	}
 
 	private function storeImage($url,$path){
