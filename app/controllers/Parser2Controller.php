@@ -166,18 +166,6 @@ class Parser2Controller extends BaseController {
 		return Redirect::back();
 	}
 
-	private function curl($url){
-		$curl = curl_init();
-		curl_setopt_array($curl, Array(
-		    CURLOPT_URL            	=> $url,
-		    CURLOPT_RETURNTRANSFER 	=> TRUE,
-		    CURLOPT_TIMEOUT			=> 400,
-		    CURLOPT_ENCODING       	=> 'UTF-8'
-		));
-		$data = curl_exec($curl);
-		curl_close($curl);
-		return $data;
-	}
 
 	private function curl_get_contents($url) {
 		if (!function_exists('curl_init')){
@@ -187,7 +175,7 @@ class Parser2Controller extends BaseController {
 	    $headers[]  = "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 	    $headers[]  = "Accept-Language:en-us,en;q=0.5";
 	    $headers[]  = "Accept-Encoding:gzip,deflate";
-	    $headers[]  = "Accept-Charset:ISO-8859-1,utf-8;q=0.7,*;q=0.7";
+	    $headers[]  = "Accept-Charset:ISO-8859-1,windows-1251,utf-8;q=0.7,*;q=0.7";
 	    $headers[]  = "Keep-Alive:115";
 	    $headers[]  = "Connection:keep-alive";
 	    $headers[]  = "Cache-Control:max-age=0";
@@ -203,8 +191,21 @@ class Parser2Controller extends BaseController {
 	    return $data;
 	}
 
+	private function curl($url){
+		$curl = curl_init();
+		curl_setopt_array($curl, Array(
+		    CURLOPT_URL            	=> $url,
+		    CURLOPT_RETURNTRANSFER 	=> TRUE,
+		    CURLOPT_TIMEOUT			=> 400,
+		    CURLOPT_ENCODING       	=> 'UTF-8'
+		));
+		$data = curl_exec($curl);
+		curl_close($curl);
+		return $data;
+	}
+
 	public function getParse($parserId='',$linksTest=''){
-		header('Content-Type: text/html; charset=utf-8');
+		//header('Content-Type: text/html; charset=utf-8');
 		include_once(app_path().'/helpers/simple_html_dom.php');
 		$htmlDom = new simple_html_dom();
 
