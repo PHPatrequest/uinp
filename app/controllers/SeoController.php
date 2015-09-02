@@ -17,12 +17,11 @@ class SeoController extends BaseController {
 		'Updated'	=> 'updated_at',
 	);
 
-	/**
-	* Display a listing of resource
-	*
-	* @return Response
-	*/
-
+/**
+* Display a listing of resource
+*
+* @return Response
+*/
 	public function getIndex()
 	{
 		$model = new Seo;
@@ -39,22 +38,22 @@ class SeoController extends BaseController {
 		return View::make('content.admin.seo.index', compact('items','table_fields'));
 	}
 
-	/**
-	 * Show the form for creating a new seo for specified url
-	 *
-	 * @return Response
-	 */
+/**
+ * Show the form for creating a new seo for specified url
+ *
+ * @return Response
+ */
 	public function getCreate()
 	{
 		return View::make('content.admin.seo.form');
 	}
 
-	/**
-	 * Show the form for editing seo
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+/**
+ * Show the form for editing seo
+ *
+ * @param  int  $id
+ * @return Response
+ */
 	public function getEdit($id)
 	{
 		$seo = Seo::find($id);
@@ -66,11 +65,11 @@ class SeoController extends BaseController {
 	}
 
 
-	/**
-	 * Show the form for creating a seo for specified element
-	 *
-	 * @return Response
-	 */
+/**
+ * Show the form for creating a seo for specified element
+ *
+ * @return Response
+ */
 	public function getItem($table,$elementId)
 	{
 		$item = DB::table($table)->find($elementId);
@@ -78,11 +77,11 @@ class SeoController extends BaseController {
 		return View::make('content.admin.seo.form',compact('elementId','table','item','seo'));
 	}
 
-	/**
-	 * Store a newly created specified resource in storage.
-	 *
-	 * @return Response
-	 */
+/**
+ * Store a newly created specified resource in storage.
+ *
+ * @return Response
+ */
 	public function postStore()
 	{
 		$validator = Validator::make(Input::all(), $this->rules);
@@ -114,12 +113,12 @@ class SeoController extends BaseController {
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+/**
+ * Update the specified resource in storage.
+ *
+ * @param  int  $id
+ * @return Response
+ */
 	public function putUpdate($id)
 	{
 		$model = Seo::find($id);
@@ -149,12 +148,12 @@ class SeoController extends BaseController {
 		return Redirect::back();
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+/**
+ * Remove the specified resource from storage.
+ *
+ * @param  int  $id
+ * @return Response
+ */
 	public function deleteDestroy($id)
 	{
 		Seo::destroy($id);

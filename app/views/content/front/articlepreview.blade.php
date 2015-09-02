@@ -11,15 +11,16 @@
 				<h2 property="name"><a href="/{{ $article->path }}/{{ $article->alias }}">{{ $article->title }}</a></h2>			
 				<div class="date">
 					<div>Опубликовано: <span property="datePublished">{{ $article->published_at }}</span></div>
-					<div>Комментариев: <span property="commentCount">{{ isset($article->commentscount)?$article->commentscount:0 }}</span></div> 
-					<div>
-						Автор:
-						@if(!empty($article->google_account)) 
-							<a href="{{ $article->google_account }}" property="author">{{ $article->username }}</a>
-						@else
-							<span property="author">{{ $article->username }}</span>
-						@endif 
-					</div>				
+					@if(isset($article->username)&&isset($article->google_account))
+						<div>
+							Автор:
+							@if(!empty($article->google_account)) 
+								<a href="{{ $article->google_account }}" property="author">{{ $article->username }}</a>
+							@else
+								<span property="author">{{ $article->username }}</span>
+							@endif 
+						</div>
+					@endif				
 				</div>
 			</div>								
 		</div>

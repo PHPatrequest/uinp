@@ -25,7 +25,8 @@
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">SEO <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li>{{ link_to('admin/seo','URL table') }}</li>                  
+                    <li>{{ link_to('admin/seo','URL table') }}</li> 
+                    <li>{{ link_to('admin/mumble','Mumble') }}</li>                 
                   </ul>
                 </li>
                 <li class="{{ Request::segment(2)=='menus'?'active':'' }}">{{ link_to('admin/menus','Menus') }}</li>

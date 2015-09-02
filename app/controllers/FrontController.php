@@ -5,10 +5,17 @@ class FrontController extends BaseController {
 	public function __construct(){
 		$this->getUrlseo();		
 		$this->getMenus();
-
-		View::share('video', $this->getChildren('video',4));
-		View::share('weeklyNews', $this->getChildren('weekly_news',4));
-		View::share('accidentNews', $this->getChildren('accident',4));
+		$this->startTime();
+		if(Request::is('/')){
+			View::share('video', $this->getChildren('video',4,false));
+			View::share('accidentNews', $this->getChildren('accident',4,false));
+			View::share('rusvesna', $this->getChildren('russkaya_vesna_proekt',4,false));
+			View::share('dnr', $this->getChildren('dnr',4,false));
+			View::share('vidverto', $this->getChildren('vidverto',4,false));
+		}
+		View::share('crimea', $this->getChildren('crimea',4,false));    
+		View::share('weeklyNews', $this->getChildren('weekly_news',4,false));
+		$this->endTime('правая панель');
 	}
 
 	private function getUrlseo(){
@@ -58,11 +65,13 @@ class FrontController extends BaseController {
 			$content = View::make('content.front.rss',compact('articles'));
 			return Response::make($content, '200')->header('Content-Type', 'text/xml');
 		}
-
-		$worldNews 		= $this->getChildren('world_news',4);
-		$importantNews 	= $this->getChildren('important_news',4);	
-
+		$this->startTime();
+		$worldNews 		= $this->getChildren('world_news',4,false);
+		$importantNews 	= $this->getChildren('important_news',4,false);	
+		$this->endTime('мировые и важные');
+		$this->startTime();
 		$articles = $model->getLastarticles();
+		$this->endTime('последние новости');
 		$seoData = $this->seo;
 
 		$mainArticle = Article::where('alias','na_glavnoi')->first();	
@@ -73,7 +82,7 @@ class FrontController extends BaseController {
 	public function missingMethod($items = array())
 	{
 		if(!empty($items)){
-			$items = $this->getUrlElements($items);		
+			$items = $this->getUrlElements($items);	
 			$breadcrumb = View::make('content.front.breadcrumb',compact('items'));
 
 			$item = array_pop($items);			
@@ -92,19 +101,22 @@ class FrontController extends BaseController {
 			}
 			if(!empty($this->seo->img_title)){
 				$item->img_title = $this->seo->img_title;
-			}											
-
+			}										
+			$this->startTime();
 			if($item->table=='folders'){
 				$model = new Folder;
 				$folders = 	$model->getFoldersByParentId($item->id);			
 				$children = $this->getChildren($item->alias);
+				$this->endTime('левый блок');
 				return View::make('content.front.folder',compact('item','folders','children','breadcrumb'));
 			} else {
 				$model = new Comment;
 				$comments = $model->getCommentsByElement($item->table,$item->id);
-				return View::make('content.front.article',compact('item','breadcrumb','comments'));
+				$closeArticles = $this->nextArticle($item->id);
+				$this->endTime('новость');
+				return View::make('content.front.article',compact('item','breadcrumb','comments','closeArticles'));
 			}
-		}				
+		}			
 		App::abort(404);
 	}
 
@@ -175,9 +187,9 @@ class FrontController extends BaseController {
 		return $item;
 	}
 
-	private function getChildren($parentAlias,$limit=0){
+	private function getChildren($parentAlias,$limit=0,$author=true){
 		$model = new Article;
-		$result = $model->getArticlesByParentAlias($parentAlias,$limit);		
+		$result = $model->getArticlesByParentAlias($parentAlias,$limit,$author);		
 		return $result;
 	}
 
@@ -186,5 +198,24 @@ class FrontController extends BaseController {
 		$articles = DB::table('articles')->select('articles.*','folders.path')->leftjoin('folders','folders.id','=','articles.parent_folder_id')->get();
 		$content = View::make('content.front.sitemap',compact('folders','articles'));
 		return Response::make($content, '200')->header('Content-Type', 'text/xml');
+	}
+
+	private function nextArticle($id){
+		return array(
+			'next'	=> $this->getArticlePath($id+1),
+			'prev'	=> $this->getArticlePath($id-1),
+		);
+	}
+
+	private function getArticlePath($id){
+		$article = Article::where('id',$id)->where('published_at','!=','0000-00-00 00:00:00')->first();
+		if(empty($article)){
+			return false;
+		}
+		$folder = Folder::find($article->parent_folder_id);
+		if(empty($folder)){
+			return false;
+		}
+		return '/'.$folder->path.'/'.$article->alias;
 	}
 }

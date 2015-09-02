@@ -55,7 +55,6 @@
 					</div>
 					<div class="col-md-12">
 						
-						<a href="/arhiv" class="btn btn-primary">Все статьи</a>
 					</div>
 				</div>
 			@endif
@@ -82,6 +81,7 @@
 		<h1>{{ $mainArticle->title }}</h1>
 		<div class="text-justify">{{ $mainArticle->content }}</div>
 	@endif
+	
 @stop
 @section('styles')
 	<link rel="stylesheet" type="text/css" media="all" href="/packages/pgwSlider/pgwslider.min.css">
@@ -90,7 +90,9 @@
 	<script type="text/javascript" src="/packages/pgwSlider/pgwslider.min.js"></script>
 	<script>
 		$(document).ready(function(){
-			$('.pgwSlider').pgwSlider();
+			$('.pgwSlider').pgwSlider({
+				maxHeight:400
+			});
 
 			$('.view-style .fa-bars').on('click',function(){
 				$('.recent-news').removeClass('col-md-6');

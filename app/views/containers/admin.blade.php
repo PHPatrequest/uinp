@@ -6,8 +6,8 @@
 
         <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
         <link rel='stylesheet' href="{{ asset('assets/css/font-awesome.min.css') }}">        
-        @yield('styles')
         <link href="{{ asset('assets/css/admin.css') }}" rel="stylesheet">
+        @yield('styles')
 
         <script src="{{ asset('assets/js/jquery-2.1.0.min.js') }}"></script>
         <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>        

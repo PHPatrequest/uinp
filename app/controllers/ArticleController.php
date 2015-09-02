@@ -4,11 +4,13 @@ class ArticleController extends \BaseController {
 
 	protected $rules = array(
 		'title'		=> 'max:255|required',
+		'alias'		=> 'max:255|required|unique:articles,alias',
 		'video'		=> 'max:255',		
 	);
 	protected $table_fields = array(
 			'Title'		=> 'title',
 			'Author'	=> 'users.username',
+			'Source'	=> 'source',
 			'Created'	=> 'created_at',
 			'Published'	=> 'published_at',
 		);
@@ -44,7 +46,7 @@ class ArticleController extends \BaseController {
 	 */
 	public function getCreate()
 	{
-		$folders = Folder::all();
+		$folders = Folder::orderBy('title','ASC')->get();
 		$parent = 0;
 		return View::make('content.admin.atricles.form')->nest('tree','content.admin.tree',compact('folders','parent'));
 	}
@@ -68,6 +70,7 @@ class ArticleController extends \BaseController {
 			$publish 			= Input::get('publishnow');
 			$video 				= Input::get('video');
 			$removeLinks 		= Input::get('removelinks');
+			$source				= 'Admin created';
 
 			$socialParams['vk'] = Input::get('vkcheckbox');
 
@@ -86,6 +89,7 @@ class ArticleController extends \BaseController {
 			$publish 			= $data['publish'];
 			$removeLinks 		= $data['removelinks'];
 			$image 				= $data['image'];
+			$source				= $data['source'];
 
 			$socialParams['vk'] = $data['vk'];
 
@@ -104,6 +108,7 @@ class ArticleController extends \BaseController {
 	        $model->user_id 			= $userId;  
 		    $model->video 				= $video;
 		    $model->parent_folder_id 	= $parentFolderId;
+		    $model->source 				= $source;
 
 		    if($removeLinks == 1){
 				$model->content = preg_replace('/<a.*<\/a>/','',$content);
@@ -127,6 +132,8 @@ class ArticleController extends \BaseController {
 		    	}
 			}
         	$model->save();
+
+        	$this->saveAlias($alias,$model->id,'articles',$parentFolderId);
   
         	$TagController = new TagController;
         	$TagController->addTags($tags,'articles',$model->id);
@@ -134,7 +141,7 @@ class ArticleController extends \BaseController {
         	$this->saveSeo($model->id,'articles',$data);	
   
 	        $this->postSocNetworks($model,$tags,$socialParams);
-        	$this->saveAlias($alias,$model->id,'articles',$parentFolderId);  	
+        	  	
 		}
 		if(empty($data)){
 			Session::flash('success', 'Successfully created!');

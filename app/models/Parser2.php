@@ -21,9 +21,11 @@ class Parser2 extends \Eloquent {
     	$search = $params['search'];
         
     	$sort_by = isset($table_fields[$sort])?$table_fields[$sort]:'id';  //set default sort
-    	isset($table_fields[$field])?$search_field=$table_fields[$field]:$search_field='parser2.id';
-        if($search_field == 'created_at' || $search_field == 'updated_at'){
-            $search_field = 'parser.'.$search_field;
+    	$search_field = isset($table_fields[$field])?$table_fields[$field]:'id';
+        if($search_field=='username'){
+             $search_field = 'users.'. $search_field;
+        } else {
+             $search_field = 'parser2.'. $search_field;
         }
 
     	$result =  DB::table('parser2')

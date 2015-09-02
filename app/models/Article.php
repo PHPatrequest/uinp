@@ -89,16 +89,25 @@ class Article extends \Eloquent {
      * @return Obj  
      */
     public function getLastarticles(){
-        return DB::table('articles')->select('articles.*','folders.path','folders.title as parent_title','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                
-                ->join('folders','folders.id','=','articles.parent_folder_id')
-                ->join('users','users.id','=','articles.user_id')
-                ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
-                //->where('articles.created_at','>',date('Y-m-d'))
-                ->where('articles.published_at','!=','0000-00-00 00:00:00')
-                ->groupBy('articles.id')
+        $articles = DB::table('articles')->select('articles.id')
+        ->where('articles.published_at','!=','0000-00-00 00:00:00')
+        ->orderby('published_at','DESC')
+        ->limit(20)
+        ->get();
+
+        if(!empty($articles)){
+            foreach ($articles as $key => $val) {
+                $atrticlesId[] = $val->id;
+            }
+            $result = DB::table('articles')
+                ->select('articles.*','folders.path','folders.title as parent_title','users.username','users.google_account')                
+                ->leftjoin('folders','folders.id','=','articles.parent_folder_id')
+                ->leftjoin('users','users.id','=','articles.user_id')
+                ->whereIn('articles.id',$atrticlesId)
                 ->orderby('published_at','DESC')
-                ->take(500)
-                ->paginate(20);
+                ->get();
+            return $result;
+        }
     }
 
     /**
@@ -106,20 +115,31 @@ class Article extends \Eloquent {
      *
      * @return Obj  
      */
-    public function getArticlesByParentAlias($parentAlias,$limit=false){
-        $result =  DB::table('articles')->select('articles.*','folders.path','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))                    
-                    ->join('folders','folders.id','=','articles.parent_folder_id')
-                    ->join('users','users.id','=','articles.user_id')
-                    ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
-                    ->where('folders.alias',$parentAlias)
-                    ->where('articles.published_at','!=','0000-00-00 00:00:00');
-        $result->groupBy('articles.id')
-               ->orderby('published_at','DESC');
+    public function getArticlesByParentAlias($parentAlias,$limit=false,$author=true){
+        $parent = Folder::where('alias',$parentAlias)->first();
+
+        $select = array('articles.*');
+        if($author){
+            $select[] = 'users.username';
+            $select[] = 'users.google_account';
+        }
+        $result =  DB::table('articles')
+                    ->select($select);                    
+        if($author){
+            $result->join('users','users.id','=','articles.user_id');
+        }
+            $result->where('articles.parent_folder_id',$parent->id)
+                    ->where('articles.published_at','!=','0000-00-00 00:00:00')
+                    ->orderby('published_at','DESC');
         if($limit){
-            return $result->take($limit)->get();  
+            $result = $result->take($limit)->get();  
         } else {
-            return $result->take(500)->paginate(20);
-        }          
+            $result = $result->paginate(20);
+        }
+        foreach ($result as $key => $val) {
+             $result[$key]->path = $parent->path;
+        } 
+        return $result;       
     }
 
     /**
@@ -144,8 +164,8 @@ class Article extends \Eloquent {
     public function getArticleByDate($date){
         return DB::table('articles')->select('articles.*','folders.path','users.username','users.google_account',DB::raw('count('.DB::getTablePrefix().'comments.id) as commentscount'))
                     ->where('articles.created_at', 'LIKE', '%'.$date.'%')
-                    ->join('folders','folders.id','=','articles.parent_folder_id')
-                    ->join('users','users.id','=','articles.user_id')
+                    ->leftjoin('folders','folders.id','=','articles.parent_folder_id')
+                    ->leftjoin('users','users.id','=','articles.user_id')
                     ->leftjoin('comments','comments.item_id','=',DB::raw(DB::getTablePrefix().'articles.id AND '.DB::getTablePrefix().'comments.table = "articles"'))
                     ->where('articles.published_at','!=','0000-00-00 00:00:00')
                     ->groupBy('articles.id')

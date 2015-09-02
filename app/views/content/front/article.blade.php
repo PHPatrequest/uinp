@@ -55,6 +55,15 @@
 							<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>
 							<div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="none" data-yashareQuickServices="vkontakte,gplus,facebook,twitter"></div>
 						</div>
+						<div style="clear:both; "></div>
+						<div class="col-md-12" style="margin-top:10px">	
+							@if(!empty($closeArticles['prev']))		
+								<a href="{{ $closeArticles['prev'] }}" class="pull-left"><i class="fa fa-arrow-left"></i> Предыдущая статья</a>
+							@endif		
+							@if(!empty($closeArticles['next']))						
+								<a href="{{ $closeArticles['next'] }}" class="pull-right">Следующая статья <i class="fa fa-arrow-right"> </i></a>	
+							@endif
+						</div>
 					</div>
 				</div>
 				@if($item->parent_folder_id!=0)

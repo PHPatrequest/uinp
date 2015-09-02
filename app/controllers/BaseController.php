@@ -28,6 +28,22 @@ class BaseController extends Controller {
 		}
 	}
 
+	protected function startTime(){
+		if($this->is_admin()){
+			$this->start_time = microtime(TRUE);
+		}
+	}
+
+	protected function endTime($text='Время выполнения'){
+		if($this->is_admin()){
+			$this->end_time = microtime(TRUE);
+			if(isset($this->start_time)){
+				echo '<div style="text-align:center; font-size:10px">'.$text.' '.round($this->end_time - $this->start_time,2).' сек</div>';
+			}
+		}
+	}
+
+
 	/**
 	 * Chek is user resource owner
 	 * @return bool

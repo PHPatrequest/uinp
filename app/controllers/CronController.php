@@ -19,4 +19,12 @@ class CronController extends BaseController {
 		$parserController = new ParserController;
 		$parserController->getParse();
 	}
+
+	public function getRunparser2($key=''){
+		if($key !=  Config::get('site_keys.cron.parser')){
+			App::abort(404);
+		}
+		$parser2Controller = new Parser2Controller;
+		$parser2Controller->getParse();
+	}
 }

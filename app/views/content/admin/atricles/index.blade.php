@@ -28,6 +28,7 @@
                     <tr>
                         <td>{{ $article->title }}</td>
                         <td>{{ $article->user }}</td>
+                        <td>{{ $article->source }}</td>
                         <td>{{ $article->created_at }}</td>
                         <td title="To search not published enter 0000">{{ $article->published_at=="0000-00-00 00:00:00"?'Not Published (hint)':$article->published_at }}</td>
                         <td>

@@ -45,7 +45,7 @@ class ParserController extends BaseController {
 	 */
 	public function getCreate()
 	{
-		$folders = Folder::all();
+		$folders = Folder::orderBy('title','ASC')->get();
 		$parent = 0;
 		$tree =  View::make('content.admin.tree',compact('folders','parent'));
 		$users = User::lists('username','id');
@@ -348,6 +348,7 @@ class ParserController extends BaseController {
 		    $article['removelinks']	= $parserRow->remove_links;
 		    $article['vk']			= $parserRow->vk;		    
 		    $article['parent_folder_id'] = $parserRow->folder_id;
+		    $article['source']		=  $parserRow->url;
 
 		    $imageUrl = (string)$entry->enclosure['url'];
 		    if(!empty($imageUrl)){

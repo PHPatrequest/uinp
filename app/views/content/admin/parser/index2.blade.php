@@ -1,5 +1,13 @@
 @extends('containers.admin')
 
+@section('styles')
+    <style>
+        .table th{
+            min-width:0px;
+        }
+    </style>
+@stop
+
 @section('main')
 
     <h1 class="fa fa-gear pull-left"> parser2 Data</h1>
@@ -28,6 +36,7 @@
             <tbody>
                 @foreach ($data as $item)
                     <tr>
+                        <td>{{ $item->id }}</td>
                         <td>{{ $item->url }}</td>
                         <td>{{ $item->publish?'<span class="fa fa-check">':'<span class="fa fa-times">' }}</td>
                         <td>{{ $item->translate?'<span class="fa fa-check">':'<span class="fa fa-times">' }}</td>

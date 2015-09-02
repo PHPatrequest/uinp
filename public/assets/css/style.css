@@ -485,3 +485,15 @@ h4{
 	min-height: 200px;
 	float: left;
 }
+.article_list_row{
+	min-height: 70px;
+}
+.article_list_row > div {
+    margin-left: 60px;
+}
+.ps-current {
+    min-height: 298px;
+}
+.ps-list li {
+	min-height: 70px;
+}

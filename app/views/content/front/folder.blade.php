@@ -29,7 +29,6 @@
 				@endforeach
 				<div class="col-md-12">
 					<div>{{ $children->links() }}</div>
-					<a href="/arhiv" class="btn btn-primary">Все статьи</a>
 				</div>
 			@endif
 

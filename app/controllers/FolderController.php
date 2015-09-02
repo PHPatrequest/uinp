@@ -14,11 +14,11 @@ class FolderController extends BaseController {
 	);
 
 
-	/**
-	* Display a listing of folders
-	*
-	* @return Response
-	*/
+/**
+* Display a listing of folders
+*
+* @return Response
+*/
 	public function getIndex()
 	{
 		$model = new Folder;
@@ -35,23 +35,23 @@ class FolderController extends BaseController {
 		return View::make('content.admin.folders.index', compact('folders','table_fields'));
 	}
 
-	/**
-	 * Show the form for creating a new folder
-	 *
-	 * @return Response
-	 */
+/**
+ * Show the form for creating a new folder
+ *
+ * @return Response
+ */
 	public function getCreate()
 	{
-		$folders = Folder::all();
+		$folders = Folder::orderBy('title','ASC')->get();
 		$parent = 0;	
 		return View::make('content.admin.folders.form')->nest('tree','content.admin.tree',compact('folders','parent'));
 	}
 
-	/**
-	 * Store a newly created folder in storage.
-	 *
-	 * @return Response
-	 */
+/**
+ * Store a newly created folder in storage.
+ *
+ * @return Response
+ */
 	public function postStore()
 	{	
 		$parent_folder_id 	= Input::get('folder_id');
@@ -82,12 +82,12 @@ class FolderController extends BaseController {
 		return Redirect::to(URL::to('admin/folders'));
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+/**
+ * Show the form for editing the specified resource.
+ *
+ * @param  int  $id
+ * @return Response
+ */
 	public function getEdit($id)
 	{
 		$model = new Folder;
@@ -103,12 +103,12 @@ class FolderController extends BaseController {
 		}
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+/**
+ * Update the specified resource in storage.
+ *
+ * @param  int  $id
+ * @return Response
+ */
 	public function putUpdate($id)
 	{
 		$model = Folder::find($id);
@@ -151,12 +151,12 @@ class FolderController extends BaseController {
 		return Redirect::to(URL::to('admin/folders'));
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+/**
+ * Remove the specified resource from storage.
+ *
+ * @param  int  $id
+ * @return Response
+ */
 	public function deleteDestroy($id)
 	{
 		$children = Alias::where('parent_folder_id',$id)->first();
