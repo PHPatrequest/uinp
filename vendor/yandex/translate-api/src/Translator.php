@@ -10,6 +10,10 @@ namespace Yandex\Translate;
 class Translator
 {
     const BASE_URL = 'https://translate.yandex.net/api/v1.5/tr.json/';
+    const MESSAGE_UNKNOWN_ERROR = 'Unknown error';
+    const MESSAGE_JSON_ERROR = 'JSON parse error';
+    const MESSAGE_INVALID_RESPONSE = 'Invalid response from service';
+
     /**
      * @var string
      */
@@ -100,8 +104,26 @@ class Translator
         $parameters['key'] = $this->key;
         $url = static::BASE_URL . $uri . '?' . http_build_query($parameters);
         curl_setopt($this->handler, CURLOPT_URL, $url);
-        $result = json_decode(curl_exec($this->handler), true);
-        if (isset($result['code']) && $result['code'] > 200) {
+        
+        $remoteResult = curl_exec($this->handler);
+        if ($remoteResult === false) {
+            throw new Exception(curl_error($this->handler), curl_errno($this->handler));
+        }
+
+        $result = json_decode($remoteResult, true);
+        if (!$result) {
+            $errorMessage = self::MESSAGE_UNKNOWN_ERROR;
+            if (version_compare(PHP_VERSION, '5.3', '>=')) {
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    if (version_compare(PHP_VERSION, '5.5', '>=')) {
+                        $errorMessage = json_last_error_msg();
+                    } else {
+                        $errorMessage = self::MESSAGE_JSON_ERROR;
+                    }
+                }
+            }
+            throw new Exception(sprintf('%s: %s', self::MESSAGE_INVALID_RESPONSE, $errorMessage));
+        } elseif (isset($result['code']) && $result['code'] > 200) {
             throw new Exception($result['message'], $result['code']);
         }
 

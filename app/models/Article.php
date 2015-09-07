@@ -117,7 +117,9 @@ class Article extends \Eloquent {
      */
     public function getArticlesByParentAlias($parentAlias,$limit=false,$author=true){
         $parent = Folder::where('alias',$parentAlias)->first();
-
+        if(empty($parent)){
+        	return false;
+        }
         $select = array('articles.*');
         if($author){
             $select[] = 'users.username';
@@ -125,6 +127,7 @@ class Article extends \Eloquent {
         }
         $result =  DB::table('articles')
                     ->select($select);                    
+        //var_dump($parent->id); exit;
         if($author){
             $result->join('users','users.id','=','articles.user_id');
         }
@@ -134,7 +137,7 @@ class Article extends \Eloquent {
         if($limit){
             $result = $result->take($limit)->get();  
         } else {
-            $result = $result->paginate(20);
+            $result = $result->simplePaginate(20);
         }
         foreach ($result as $key => $val) {
              $result[$key]->path = $parent->path;

@@ -67,6 +67,8 @@ return array(
 
 	'key' => '8Mt8G9l8yi4pe0SA8fHq8aoIShCszht0',
 
+	'cipher' => MCRYPT_RIJNDAEL_128,
+
 	/*
 	|--------------------------------------------------------------------------
 	| Autoloaded Service Providers
@@ -105,7 +107,7 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-		'Folklore\Image\ImageServiceProvider',
+		'Intervention\Image\ImageServiceProvider',
 	),
 
 	/*
@@ -171,7 +173,7 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-		'Image' 		  => 'Folklore\Image\Facades\Image',
+		'Image' 		  => 'Intervention\Image\Facades\Image',
 
 	),
 

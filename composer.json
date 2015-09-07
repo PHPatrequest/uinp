@@ -3,12 +3,11 @@
 	"description": "The Laravel Framework.",
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
+	"type": "project",
 	"require": {
-		"laravel/framework": "4.1.*",
-		"folklore/image": "0.1.*",
-		"yandex/translate-api": "~1.0"
-	},
-	"require-dev": {
+		"laravel/framework": "4.2.*",
+		"yandex/translate-api": "~1.0",
+		"intervention/image": "^2.3"
 	},
 	"autoload": {
 		"classmap": [
@@ -16,7 +15,7 @@
 			"app/models",
 			"app/database/migrations",
 			"app/database/seeds",
-			"app/helpers"	
+			"app/helpers"
 		]
 	},
 	"scripts": {

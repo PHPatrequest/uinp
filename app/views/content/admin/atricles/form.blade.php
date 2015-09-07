@@ -88,7 +88,7 @@
                         {{ Form::file('userfile', array('id' => 'imgInp')) }}
                         <input type="hidden" name="image" id="image_path" value="{{ !empty($article->image)?$article->image:'' }}">
                     </div>
-                <div>
+                </div>
             </div>
             <div class='form-group'>
                 {{ Form::label('video', 'Video (youtube identifier)') }}
